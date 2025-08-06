@@ -1,0 +1,63 @@
+<!-- ✅ MOBILE TOP NAVBAR -->
+<div class="md:hidden flex justify-between items-center px-4 py-3 bg-[#141414] text-white shadow-md fixed top-0 left-0 right-0 z-50">
+  <h1 class="text-lg font-bold">
+    <span class="text-[#E50914]">Mov</span>ioPhim
+  </h1>
+  <button (click)="toggleSidebar()" class="text-2xl focus:outline-none">
+    ☰
+  </button>
+</div>
+
+<!-- ✅ OVERLAY khi mở sidebar mobile -->
+<div
+  class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden"
+  *ngIf="isSidebarOpen"
+  (click)="closeSidebar()"
+></div>
+
+<!-- ✅ MAIN WRAPPER (GRID: sidebar trái - content phải) -->
+<div class="grid grid-cols-12 min-h-screen bg-[#1a1a1e] pt-14 md:pt-0">
+
+  <!-- ✅ SIDEBAR -->
+  <aside
+    class="col-span-8 sm:col-span-5 md:col-span-2 bg-[#141414] z-50 transform transition-transform duration-300 flex flex-col justify-between p-6 text-[14px] font-normal h-screen
+    fixed md:relative top-0 left-0
+    md:translate-x-0"
+    [ngClass]="{
+      '-translate-x-full': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }"
+  >
+    <!-- Logo -->
+    <div>
+      <h1 class="text-white text-[18px] font-semibold mb-12 text-center leading-none">
+        <span class="text-[#E50914]">Mov</span><span class="text-white">ioPhim</span>
+      </h1>
+
+      <!-- Main Nav -->
+      <nav class="flex flex-col space-y-6 text-[#b3b3b3]">
+        <a href="/home" class="flex items-center space-x-3 text-[#E50914] font-semibold">
+          <i class="fas fa-home text-[#E50914] text-lg w-5"></i>
+          <span class="md:hidden lg:inline">Home</span>
+        </a>
+        <a href="/movie-genre" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+          <i class="far fa-bookmark text-lg w-5"></i>
+          <span class="md:hidden lg:inline">Movie</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+          <i class="fas fa-shopping-cart text-lg w-5"></i>
+          <span class="md:hidden lg:inline">Purchase</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+          <i class="far fa-bell text-lg w-5"></i>
+          <span class="md:hidden lg:inline">Reminder</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ✅ MAIN CONTENT -->
+  <main class="col-span-12 md:col-span-10 p-6 md:p-8 text-white overflow-y-auto md:ml-0 ml-0">
+    <router-outlet></router-outlet>
+  </main>
+</div>

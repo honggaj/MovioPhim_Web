@@ -1,0 +1,87 @@
+<!-- List thể loại -->
+<div class="flex flex-wrap gap-2 mb-4">
+  <button 
+    *ngFor="let genre of genres"
+    (click)="selectGenre(genre.slug)"
+    [class.bg-red-700]="genre.slug === activeGenreSlug"
+    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition cursor-pointer">
+    {{ genre.name }}
+  </button>
+</div>
+
+<!-- Danh sách phim dạng grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+  <div
+    *ngFor="let movie of pagedMovies"
+    class="p-2 text-white bg-black shadow hover:scale-105 transition rounded"
+  >
+    <a [routerLink]="['/movie-detail', movie.slug]" class="block cursor-pointer">
+      <img
+        [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url"
+        [alt]="movie.name"
+        loading="lazy"
+        class="w-full h-40 object-cover rounded"
+      />
+      <div class="p-2">
+        <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+        <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+        <div class="space-x-2">
+          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+            {{ movie.category[0]?.name }}
+          </span>
+          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+            {{ movie.year }}
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+<!-- Paginator đẹp đậm chất Netflix -->
+<div class="flex justify-center items-center mt-6 flex-wrap gap-4">
+  <!-- Rows per page -->
+  <div class="flex items-center gap-2 text-white ">
+    <label class="text-sm">Hiển thị:</label>
+    <select [(ngModel)]="rows" (change)="changePage(1)"
+      class="px-2 py-1 bg-gray-900 border border-gray-700 text-white rounded text-sm focus:outline-none focus:ring-red-500 cursor-pointer">
+      <option *ngFor="let opt of [12, 24, 36]" [value]="opt">{{ opt }}</option>
+    </select>
+  </div>
+
+  <!-- Pagination -->
+  <nav class="inline-flex items-center space-x-1">
+    <button 
+      (click)="changePage(currentPage - 1)" 
+      [disabled]="currentPage === 1"
+      class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
+      [ngClass]="{
+        'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed': currentPage === 1,
+        'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== 1
+      }">
+      «
+    </button>
+
+    <ng-container *ngFor="let page of pagesToShow">
+      <button 
+        (click)="changePage(page)"
+        class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
+        [ngClass]="{
+          'bg-red-600 text-white border-red-600': currentPage === page,
+          'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== page
+        }">
+        {{ page }}
+      </button>
+    </ng-container>
+
+    <button 
+      (click)="changePage(currentPage + 1)" 
+      [disabled]="currentPage === totalPages"
+      class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
+      [ngClass]="{
+        'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed': currentPage === totalPages,
+        'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== totalPages
+      }">
+      »
+    </button>
+  </nav>
+</div>
