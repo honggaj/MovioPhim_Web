@@ -20,6 +20,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { FormsModule } from '@angular/forms';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { MovieCountryComponent } from './pages/movie-country/movie-country.component';
+import { TvShowsComponent } from './pages/tv-shows/tv-shows.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MovieCountryComponent } from './pages/movie-country/movie-country.compo
     MovieListAnimationComponent,
     MovieBannerComponent,
     SearchPageComponent,
-    MovieCountryComponent
+    MovieCountryComponent,
+    TvShowsComponent
   ],
   imports: [
     BrowserModule,

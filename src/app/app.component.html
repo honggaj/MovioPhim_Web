@@ -50,6 +50,15 @@
           <i class="far fa-bookmark text-lg w-5"></i>
           <span class="md:hidden lg:inline">Movie</span>
         </a>
+          <!-- TV-shows -->
+        <a [routerLink]="'/tv-shows'" (click)="setActive('/tv-shows')"
+          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300" [ngClass]="{
+    'text-[#E50914] bg-[#2e2e2e]': activeLink === '/tv-shows',
+    'text-[#b3b3b3] hover:text-white': activeLink !== '/tv-shows'
+  }">
+          <i class="far fa-bookmark text-lg w-5"></i>
+          <span class="md:hidden lg:inline">TV Show</span>
+        </a>
 
         <!-- quoc-gia -->
         <a href="/quoc-gia" (click)="setActive('/quoc-gia')"

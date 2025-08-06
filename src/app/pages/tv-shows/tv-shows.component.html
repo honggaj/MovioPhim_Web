@@ -1,0 +1,28 @@
+<div class="p-4 bg-black text-white h-auto">
+    <!-- Tiêu đề -->
+    <h2 class="text-xl font-bold mb-4">TV show</h2>
+    <!-- Container cuộn -->
+    <div class="scrollbar-hide overflow-y-auto max-h-[700px] pr-1">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 gap-4">
+            <div *ngFor="let movie of movies | slice:0:10"
+                class="text-white bg-zinc-900 shadow rounded overflow-hidden">
+                <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
+                    <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
+                        class="w-full h-40 object-cover" />
+                    <div class="p-2">
+                        <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+                        <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+                    </div>
+                     <div class="space-x-2 px-2 py-2">
+            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+              {{ movie.category[0]?.name }}
+            </span>
+            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+              {{ movie.year }}
+            </span>
+          </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

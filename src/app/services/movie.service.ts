@@ -31,6 +31,9 @@ getPhimLe(): Observable<any> {
 getPhimBo(): Observable<any> {
   return this.getMoviesBySlug('phim-bo');
 }
+getTvShow(): Observable<any> {
+  return this.getMoviesBySlug('tv-shows');
+}
 
 getHoatHinh(): Observable<any> {
   return this.getMoviesBySlug('hoat-hinh');
