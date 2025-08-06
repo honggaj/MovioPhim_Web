@@ -7,6 +7,7 @@ import { MovieGenreComponent } from './pages/movie-genre/movie-genre.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { MovieCountryComponent } from './pages/movie-country/movie-country.component';
 import { TvShowsComponent } from './pages/tv-shows/tv-shows.component';
+import { MovieListAnimationComponent } from './pages/movie-list-animation/movie-list-animation.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,6 +16,8 @@ const routes: Routes = [
   { path: 'the-loai', component: MovieGenreComponent }, // theo thể loại
   { path: 'quoc-gia', component: MovieCountryComponent },     // chi tiết phim
   { path: 'tv-shows', component: TvShowsComponent }, // trang TV Shows
+    { path: 'anime', component: MovieListAnimationComponent }, // trang TV Shows
+
   { path: '**', redirectTo: '' }                         // fallback nếu route không tồn tại
 ];
 @NgModule({

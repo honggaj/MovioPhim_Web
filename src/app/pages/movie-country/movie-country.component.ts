@@ -10,17 +10,12 @@ import { MovieService } from '../../services/movie.service';
 })
 export class MovieCountryComponent implements OnInit {
   countries: any[] = [];
-  movies: any[] = [];
-  pagedMovies: any[] = [];
+   movies: any[] = [];
 
+  currentPage: number = 1;
+  itemsPerPage: number = 12;
   activeCountrySlug: string = '';
-  currentPage = 1;
-  rows = 10;
-  totalPages = 0;
   pagesToShow: number[] = [];
-
-  indicatorLeft = 0;
-  indicatorWidth = 0;
 
   isLoading: boolean = false;
 
@@ -30,27 +25,23 @@ export class MovieCountryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.movieService.getCountries().subscribe((res) => {
-      this.countries = res.data.items;
-    });
+   this.movieService.getCountries().subscribe((res) => {
+  this.countries = res.data.items; // ✅ Gán đúng vào biến countries
 
-    this.route.params.subscribe((params) => {
-      const slug = params['slug'];
-      if (slug) {
-        this.selectCountry(slug);
-      }
-    });
+  this.route.params.subscribe((params) => {
+    const slug = params['slug'];
+    if (slug) {
+      this.selectCountry(slug);
+    } else if (this.countries.length > 0) {
+      this.selectCountry(this.countries[0].slug);
+    }
+  });
+});
+
   }
 
-  selectCountry(slug: string, btn?: HTMLElement) {
+  selectCountry(slug: string) {
     this.activeCountrySlug = slug;
-
-    if (btn) {
-      this.indicatorLeft = btn.offsetLeft;
-      this.indicatorWidth = btn.offsetWidth;
-      btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-
     this.isLoading = true;
     this.currentPage = 1;
 
@@ -61,18 +52,23 @@ export class MovieCountryComponent implements OnInit {
     });
   }
 
+  get paginatedMovies() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.movies.slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.movies.length / this.itemsPerPage);
+  }
+
   changePage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.updatePagination();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
   }
 
   updatePagination() {
-    this.totalPages = Math.ceil(this.movies.length / this.rows);
-    const start = (this.currentPage - 1) * this.rows;
-    const end = start + this.rows;
-    this.pagedMovies = this.movies.slice(start, end);
-
     const visiblePages = 5;
     let startPage = Math.max(this.currentPage - Math.floor(visiblePages / 2), 1);
     let endPage = startPage + visiblePages - 1;

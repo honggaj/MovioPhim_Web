@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { MovieCountryComponent } from './pages/movie-country/movie-country.component';
 import { TvShowsComponent } from './pages/tv-shows/tv-shows.component';
+import { MovieListAnimationHomeComponent } from './pages/movie-list-animation-home/movie-list-animation-home.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TvShowsComponent } from './pages/tv-shows/tv-shows.component';
     MovieBannerComponent,
     SearchPageComponent,
     MovieCountryComponent,
-    TvShowsComponent
+    TvShowsComponent,
+    MovieListAnimationHomeComponent
   ],
   imports: [
     BrowserModule,

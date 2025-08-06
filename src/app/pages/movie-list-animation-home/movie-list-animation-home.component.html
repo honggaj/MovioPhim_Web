@@ -1,0 +1,33 @@
+<div class="p-4 bg-black text-white ">
+    <!-- Tiêu đề -->
+    <h2 class="text-2xl font-bold mb-4">
+        <img src="assets/icon/anime_icon.gif" alt="Anime Icon" class="inline-block w-10 h-10  mr-2">
+         Anime</h2>
+    <p-carousel [value]="movies" [numVisible]="7" [numScroll]="1" [circular]="true" [autoplayInterval]="3000"
+        [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+      <ng-template let-movie pTemplate="item">
+    <div class="p-2 text-white bg-black shadow hover:scale-105 transition w-[180px] ">
+        <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
+            <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" 
+                [alt]="movie.name"
+                loading="lazy"
+                class="w-full h-60 object-cover rounded" />
+            <div class="p-2">
+                <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+                <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+                <div class="space-x-2 mt-1">
+                    <p class="inline-block bg-gray-300 text-gray-600 text-xs px-2 py-1 rounded">
+                        {{ movie.category[0]?.name }}
+                    </p>
+                    <p class="inline-block bg-gray-300 text-gray-600 text-xs px-2 py-1 rounded">
+                        {{ movie.year }}
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+</ng-template>
+
+    </p-carousel>
+
+</div>

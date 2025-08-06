@@ -9,18 +9,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./movie-genre.component.css'],
 })
 export class MovieGenreComponent implements OnInit {
- genres: any[] = [];
+  genres: any[] = [];
   movies: any[] = [];
-  pagedMovies: any[] = [];
 
-  currentPage = 1;
-  rows = 10;
-  totalPages = 0;
+  currentPage: number = 1;
+  itemsPerPage: number = 12;
+  activeGenreSlug: string = '';
   pagesToShow: number[] = [];
-activeGenreSlug: string = '';
-
-  indicatorLeft = 0;
-  indicatorWidth = 0;
 
   isLoading: boolean = false;
 
@@ -32,25 +27,20 @@ activeGenreSlug: string = '';
   ngOnInit(): void {
     this.movieService.getGenres().subscribe((res) => {
       this.genres = res.data.items;
-    });
 
-    this.route.params.subscribe((params) => {
-      const slug = params['slug'];
-      if (slug) {
-        this.selectGenre(slug);
-      }
+      this.route.params.subscribe((params) => {
+        const slug = params['slug'];
+        if (slug) {
+          this.selectGenre(slug);
+        } else if (this.genres.length > 0) {
+          this.selectGenre(this.genres[0].slug);
+        }
+      });
     });
   }
 
-  selectGenre(slug: string, btn?: HTMLElement) {
+  selectGenre(slug: string) {
     this.activeGenreSlug = slug;
-
-    if (btn) {
-      this.indicatorLeft = btn.offsetLeft;
-      this.indicatorWidth = btn.offsetWidth;
-      btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-
     this.isLoading = true;
     this.currentPage = 1;
 
@@ -61,18 +51,23 @@ activeGenreSlug: string = '';
     });
   }
 
+  get paginatedMovies() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.movies.slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.movies.length / this.itemsPerPage);
+  }
+
   changePage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.updatePagination();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
   }
 
   updatePagination() {
-    this.totalPages = Math.ceil(this.movies.length / this.rows);
-    const start = (this.currentPage - 1) * this.rows;
-    const end = start + this.rows;
-    this.pagedMovies = this.movies.slice(start, end);
-
     const visiblePages = 5;
     let startPage = Math.max(this.currentPage - Math.floor(visiblePages / 2), 1);
     let endPage = startPage + visiblePages - 1;

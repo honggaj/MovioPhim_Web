@@ -1,113 +1,82 @@
-<div class="relative overflow-hidden">
-  <div
-    class="flex gap-2 overflow-x-auto border-b border-gray-600 pb-2 no-scrollbar scroll-smooth"
-    #buttonList
-  >
-    <button
-      *ngFor="let genre of genres"
-      #btn
-      (click)="selectGenre(genre.slug, btn)"
-      [class.text-red-500]="genre.slug === activeGenreSlug"
-      class="px-4 py-2 text-sm text-white whitespace-nowrap relative"
-    >
+<!-- Thanh chọn thể loại scroll ngang -->
+<div class="overflow-x-auto no-scrollbar">
+  <div class="flex gap-2 w-max">
+    <button *ngFor="let genre of genres" (click)="selectGenre(genre.slug)"
+      class="px-3 py-1 text-sm whitespace-nowrap transition h-9 rounded cursor-pointer" [ngClass]="{
+        'bg-red-700 text-white': genre.slug === activeGenreSlug,
+        'bg-gray-800 text-white': genre.slug !== activeGenreSlug
+      }">
       {{ genre.name }}
     </button>
   </div>
-
-  <!-- Thanh line đỏ mảnh -->
-  <div
-    class="absolute bottom-0 h-[2px] bg-red-600 transition-all duration-300"
-    [ngStyle]="{ left: indicatorLeft + 'px', width: indicatorWidth + 'px' }"
-  ></div>
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4">
-  <!-- Skeleton -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4 p-4 bg-black min-h-[70vh]">
+  <!-- Skeleton loading -->
   <ng-container *ngIf="isLoading; else movieList">
-    <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" class="animate-pulse bg-gray-800 p-2 rounded">
-      <div class="w-full h-40 bg-gray-700 rounded mb-2"></div>
-      <div class="h-4 bg-gray-700 rounded w-3/4 mb-1"></div>
+    <div *ngFor="let i of [].constructor(12)" class="animate-pulse bg-gray-800 rounded p-3">
+      <div class="h-40 bg-gray-700 rounded mb-2"></div>
+      <div class="h-3 bg-gray-700 rounded w-3/4 mb-1"></div>
       <div class="h-3 bg-gray-700 rounded w-1/2 mb-2"></div>
-      <div class="flex space-x-2">
+      <div class="flex gap-2">
         <div class="h-4 w-10 bg-gray-700 rounded"></div>
         <div class="h-4 w-10 bg-gray-700 rounded"></div>
       </div>
     </div>
   </ng-container>
 
-  <!-- Movie list -->
   <ng-template #movieList>
-    <div
-      *ngFor="let movie of pagedMovies"
-      class="p-2 text-white bg-black shadow hover:scale-105 transition rounded"
-    >
+    <div *ngFor="let movie of paginatedMovies" class="text-white bg-zinc-900 shadow rounded overflow-hidden hover:scale-105 transform transition">
       <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
-        <img
-          [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url"
-          [alt]="movie.name"
-          loading="lazy"
-          class="w-full h-40 object-cover rounded"
-        />
+        <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
+          class="w-full h-40 object-cover" />
         <div class="p-2">
           <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
           <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
-          <div class="space-x-2">
-            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
-              {{ movie.category[0]?.name }}
-            </span>
-            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
-              {{ movie.year }}
-            </span>
-          </div>
+        </div>
+        <div class="space-x-2 px-2 py-2">
+          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+            {{ movie.category[0]?.name }}
+          </span>
+          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+            {{ movie.year }}
+          </span>
         </div>
       </a>
     </div>
   </ng-template>
-</div>
-
-<!-- Pagination -->
-<div class="flex justify-center items-center mt-6 flex-wrap gap-4">
+<!-- Pagination nằm trong grid, căn giữa -->
+<div *ngIf="!isLoading && totalPages > 1" class="col-span-full flex justify-center mt-6">
   <div class="flex items-center gap-2 text-white">
-    <label class="text-sm">Hiển thị:</label>
-    <select [(ngModel)]="rows" (change)="changePage(1)"
-      class="px-2 py-1 bg-gray-900 border border-gray-700 text-white rounded text-sm focus:outline-none focus:ring-red-500 cursor-pointer">
-      <option *ngFor="let opt of [12, 24, 36]" [value]="opt">{{ opt }}</option>
-    </select>
-  </div>
-
-  <nav class="inline-flex items-center space-x-1">
-    <button 
-      (click)="changePage(currentPage - 1)" 
+    <button
+      (click)="changePage(currentPage - 1)"
       [disabled]="currentPage === 1"
-      class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
-      [ngClass]="{
-        'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed': currentPage === 1,
-        'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== 1
-      }">
-      «
+      class="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
+    >
+      Trước
     </button>
 
     <ng-container *ngFor="let page of pagesToShow">
-      <button 
+      <button
         (click)="changePage(page)"
-        class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
+        class="px-3 py-1 rounded"
         [ngClass]="{
-          'bg-red-600 text-white border-red-600': currentPage === page,
-          'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== page
-        }">
+          'bg-red-600 text-white': currentPage === page,
+          'bg-gray-700 text-white': currentPage !== page
+        }"
+      >
         {{ page }}
       </button>
     </ng-container>
 
-    <button 
-      (click)="changePage(currentPage + 1)" 
+    <button
+      (click)="changePage(currentPage + 1)"
       [disabled]="currentPage === totalPages"
-      class="px-3 py-2 rounded border text-sm font-medium transition-all cursor-pointer"
-      [ngClass]="{
-        'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed': currentPage === totalPages,
-        'bg-gray-900 text-white border-gray-700 hover:bg-red-600': currentPage !== totalPages
-      }">
-      »
+      class="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
+    >
+      Sau
     </button>
-  </nav>
+  </div>
+</div>
+
 </div>
