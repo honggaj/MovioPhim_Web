@@ -2,7 +2,7 @@
   <p-carousel [value]="banners" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions">
     <ng-template let-movie pTemplate="item">
       <div class="p-2 text-white bg-black shadow  transition" *ngIf="movie">
-        <a [routerLink]="['/movie-detail', movie.slug]" class="block cursor-pointer">
+        <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
           <img
             [src]="'https://img.ophim.live/uploads/movies/' + movie.poster_url"
             [alt]="movie.name"

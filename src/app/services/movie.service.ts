@@ -52,6 +52,16 @@ getMoviesByGenre(slug: string): Observable<any> {
   return this.http.get(`${this.baseUrl}/the-loai/${slug}`);
 }
 
+// Danh sách quốc gia
+getCountries(): Observable<any> {
+  return this.http.get(`${this.baseUrl}/quoc-gia`);
+}
+
+// Danh sách phim theo quốc gia
+getMoviesByCountry(slug: string): Observable<any> {
+  return this.http.get(`${this.baseUrl}/quoc-gia/${slug}`);
+}
+
 
   // Lấy thông tin phim
   getMovieDetail(slug: string): Observable<any> {

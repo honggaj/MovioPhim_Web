@@ -4,13 +4,13 @@
     #buttonList
   >
     <button
-      *ngFor="let genre of genres"
+      *ngFor="let country of countries"
       #btn
-      (click)="selectGenre(genre.slug, btn)"
-      [class.text-red-500]="genre.slug === activeGenreSlug"
+      (click)="selectCountry(country.slug, btn)"
+      [class.text-red-500]="country.slug === activeCountrySlug"
       class="px-4 py-2 text-sm text-white whitespace-nowrap relative"
     >
-      {{ genre.name }}
+      {{ country.name }}
     </button>
   </div>
 

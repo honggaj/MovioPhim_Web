@@ -1,5 +1,6 @@
 <!-- ✅ MOBILE TOP NAVBAR -->
-<div class="md:hidden flex justify-between items-center px-4 py-3 bg-[#141414] text-white shadow-md fixed top-0 left-0 right-0 z-50">
+<div
+  class="md:hidden flex justify-between items-center px-4 py-3 bg-[#141414] text-white shadow-md fixed top-0 left-0 right-0 z-50">
   <h1 class="text-lg font-bold">
     <span class="text-[#E50914]">Mov</span>ioPhim
   </h1>
@@ -9,25 +10,19 @@
 </div>
 
 <!-- ✅ OVERLAY khi mở sidebar mobile -->
-<div
-  class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden"
-  *ngIf="isSidebarOpen"
-  (click)="closeSidebar()"
-></div>
+<div class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden" *ngIf="isSidebarOpen"
+  (click)="closeSidebar()"></div>
 
 <!-- ✅ MAIN WRAPPER (GRID: sidebar trái - content phải) -->
 <div class="grid grid-cols-12 min-h-screen bg-[#1a1a1e] pt-14 md:pt-0">
 
   <!-- ✅ SIDEBAR -->
-  <aside
-    class="col-span-8 sm:col-span-5 md:col-span-2 bg-[#141414] z-50 transform transition-transform duration-300 flex flex-col justify-between p-6 text-[14px] font-normal h-screen
+  <aside class="col-span-8 sm:col-span-5 md:col-span-2 bg-[#141414] z-50 transform transition-transform duration-300 flex flex-col justify-between p-6 text-[14px] font-normal h-screen
     fixed md:relative top-0 left-0
-    md:translate-x-0"
-    [ngClass]="{
+    md:translate-x-0" [ngClass]="{
       '-translate-x-full': !isSidebarOpen,
       'translate-x-0': isSidebarOpen
-    }"
-  >
+    }">
     <!-- Logo -->
     <div>
       <h1 class="text-white text-[18px] font-semibold mb-12 text-center leading-none">
@@ -36,22 +31,46 @@
 
       <!-- Main Nav -->
       <nav class="flex flex-col space-y-6 text-[#b3b3b3]">
-        <a href="/home" class="flex items-center space-x-3 text-[#E50914] font-semibold">
-          <i class="fas fa-home text-[#E50914] text-lg w-5"></i>
+        <!-- Home -->
+        <a [routerLink]="'/trang-chu'" (click)="setActive('/trang-chu')"
+          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300" [ngClass]="{
+    'text-[#E50914] bg-[#2e2e2e]': activeLink === '/trang-chu',
+    'text-[#b3b3b3] hover:text-white': activeLink !== '/trang-chu'
+  }">
+          <i class="fas fa-home text-lg w-5"></i>
           <span class="md:hidden lg:inline">Home</span>
         </a>
-        <a href="/movie-genre" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+
+        <!-- Movie -->
+        <a [routerLink]="'/the-loai'" (click)="setActive('/the-loai')"
+          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300" [ngClass]="{
+    'text-[#E50914] bg-[#2e2e2e]': activeLink === '/the-loai',
+    'text-[#b3b3b3] hover:text-white': activeLink !== '/the-loai'
+  }">
           <i class="far fa-bookmark text-lg w-5"></i>
           <span class="md:hidden lg:inline">Movie</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+
+        <!-- quoc-gia -->
+        <a href="/quoc-gia" (click)="setActive('/quoc-gia')"
+          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300" [ngClass]="{
+    'text-[#E50914] bg-[#2e2e2e]': activeLink === '/quoc-gia',
+    'text-[#b3b3b3] hover:text-white': activeLink !== '/quoc-gia'
+  }">
           <i class="fas fa-shopping-cart text-lg w-5"></i>
-          <span class="md:hidden lg:inline">Purchase</span>
+          <span class="md:hidden lg:inline">Country</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 hover:text-white transition-colors duration-300">
+
+        <!-- Reminder -->
+        <a href="#" (click)="setActive('reminder')"
+          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300" [ngClass]="{
+    'text-[#E50914] bg-[#2e2e2e]': activeLink === 'reminder',
+    'text-[#b3b3b3] hover:text-white': activeLink !== 'reminder'
+  }">
           <i class="far fa-bell text-lg w-5"></i>
           <span class="md:hidden lg:inline">Reminder</span>
         </a>
+
       </nav>
     </div>
   </aside>

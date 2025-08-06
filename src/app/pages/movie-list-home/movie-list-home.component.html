@@ -5,7 +5,7 @@
         [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
         <ng-template let-movie pTemplate="item">
             <div class="p-2 text-white bg-black shadow hover:scale-105 transition ">
-                <a [routerLink]="['/movie-detail', movie.slug]" class="block cursor-pointer">
+                <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
                     
                     <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
                         class="w-full h-100 object-cover " />

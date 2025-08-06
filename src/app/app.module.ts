@@ -18,6 +18,8 @@ import { MovieBannerComponent } from './pages/movie-banner/movie-banner.componen
 import { SharedModule } from './shared/shared.module'; // ✅ Đúng nè!
 import { CarouselModule } from 'primeng/carousel';
 import { FormsModule } from '@angular/forms';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
+import { MovieCountryComponent } from './pages/movie-country/movie-country.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { FormsModule } from '@angular/forms';
     MovieListNewComponent,
     MovieListSeriesComponent,
     MovieListAnimationComponent,
-    MovieBannerComponent
+    MovieBannerComponent,
+    SearchPageComponent,
+    MovieCountryComponent
   ],
   imports: [
     BrowserModule,

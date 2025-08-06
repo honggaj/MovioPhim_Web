@@ -41,7 +41,7 @@ export class MovieListNewComponent {
     });
   }
   goToDetail(slug: string): void {
-    this.router.navigate(['/movie-detail', slug]);
+    this.router.navigate(['/phim', slug]);
 
   }
 }

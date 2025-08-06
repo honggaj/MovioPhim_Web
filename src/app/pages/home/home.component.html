@@ -1,4 +1,14 @@
+<div class="flex items-center gap-2 w-full  mx-auto mb-6">
+  <input type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm phim..."
+    class="border-none bg-[#2e2e2e] text-white placeholder-gray-400 px-4 py-2 rounded flex-1 focus:outline-none focus:ring-1 focus:ring-red-900" />
+
+  <button (click)="onSearch()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded whitespace-nowrap cursor-pointer">
+    Tìm
+  </button>
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+
   <!-- Bên trái: rộng hơn trên màn to -->
   <div class="md:col-span-10">
     <app-movie-banner></app-movie-banner>

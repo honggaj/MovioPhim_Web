@@ -13,7 +13,8 @@ import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 export class MovieDetailComponent implements OnInit {
   slug: string = '';
   movie: any;
-
+  selectedEpisodeLink: string | null = null;
+showTrailer: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService // xài service chứ đừng gọi http tay
@@ -35,6 +36,15 @@ getBreadCrumbNames(type: 'the-loai' | 'quoc-gia'): string {
   )?.map((b: any) => b.name);
 
   return items?.length ? items.join(', ') : 'Đang cập nhật';
+}
+setEpisode(link: string) {
+  this.selectedEpisodeLink = link;
+  this.showTrailer = false; // Tắt trailer khi bật phim
+}
+
+toggleTrailer() {
+  this.showTrailer = !this.showTrailer;
+  this.selectedEpisodeLink = null; // Tắt phim khi bật trailer
 }
 
 }

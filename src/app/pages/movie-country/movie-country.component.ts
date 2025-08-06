@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../services/movie.service';
 import { ActivatedRoute } from '@angular/router';
+import { MovieService } from '../../services/movie.service';
 
 @Component({
-  selector: 'app-movie-genre',
+  selector: 'app-movie-country',
   standalone: false,
-  templateUrl: './movie-genre.component.html',
-  styleUrls: ['./movie-genre.component.css'],
+  templateUrl: './movie-country.component.html',
+  styleUrls: ['./movie-country.component.css']
 })
-export class MovieGenreComponent implements OnInit {
- genres: any[] = [];
+export class MovieCountryComponent implements OnInit {
+  countries: any[] = [];
   movies: any[] = [];
   pagedMovies: any[] = [];
 
+  activeCountrySlug: string = '';
   currentPage = 1;
   rows = 10;
   totalPages = 0;
   pagesToShow: number[] = [];
-activeGenreSlug: string = '';
 
   indicatorLeft = 0;
   indicatorWidth = 0;
@@ -30,20 +30,20 @@ activeGenreSlug: string = '';
   ) {}
 
   ngOnInit(): void {
-    this.movieService.getGenres().subscribe((res) => {
-      this.genres = res.data.items;
+    this.movieService.getCountries().subscribe((res) => {
+      this.countries = res.data.items;
     });
 
     this.route.params.subscribe((params) => {
       const slug = params['slug'];
       if (slug) {
-        this.selectGenre(slug);
+        this.selectCountry(slug);
       }
     });
   }
 
-  selectGenre(slug: string, btn?: HTMLElement) {
-    this.activeGenreSlug = slug;
+  selectCountry(slug: string, btn?: HTMLElement) {
+    this.activeCountrySlug = slug;
 
     if (btn) {
       this.indicatorLeft = btn.offsetLeft;
@@ -54,7 +54,7 @@ activeGenreSlug: string = '';
     this.isLoading = true;
     this.currentPage = 1;
 
-    this.movieService.getMoviesByGenre(slug).subscribe((res) => {
+    this.movieService.getMoviesByCountry(slug).subscribe((res) => {
       this.movies = res.data?.items || [];
       this.updatePagination();
       this.isLoading = false;

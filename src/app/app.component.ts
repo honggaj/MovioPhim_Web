@@ -11,6 +11,8 @@ export class AppComponent implements OnInit {
   isSidebarOpen = false;
   screenIsMobile = false;
 
+  activeLink: string = '/home';
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.checkScreenSize();
@@ -19,7 +21,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.checkScreenSize();
   }
-
+setActive(link: string) {
+  this.activeLink = link;
+}
   private checkScreenSize(): void {
     this.screenIsMobile = window.innerWidth < 768;
     // Tự động đóng sidebar khi chuyển sang desktop
