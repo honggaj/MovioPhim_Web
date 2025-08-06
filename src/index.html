@@ -6,6 +6,47 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<!-- ✅ Facebook SDK đặt cuối cùng để tránh lỗi tải chậm -->
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '2041578963011937', // Thay bằng App ID của bạn
+      xfbml      : true,
+      version    : 'v17.0'
+    });
+  };
+
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- chat -->
+<script type="text/javascript">
+  
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "c113c91c-84fb-4d62-b3f1-a0b261acd761";
+  (function() {
+    d = document;
+    s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+
+  // Chờ Crisp tải xong rồi đổi màu
+  setTimeout(function() {
+    window.$crisp.push(["config", "color:theme", "#ff0000"]); // Đổi thành màu đỏ
+  }, 1000);
+</script>
+
+
+
 </head>
 <body>
   <app-root></app-root>

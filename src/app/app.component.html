@@ -10,11 +10,11 @@
 </div>
 
 <!-- ✅ OVERLAY khi mở sidebar mobile -->
-<div class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden" *ngIf="isSidebarOpen"
-  (click)="closeSidebar()"></div>
+<div class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden"
+  *ngIf="isSidebarOpen" (click)="closeSidebar()"></div>
 
 <!-- ✅ MAIN WRAPPER (GRID: sidebar trái - content phải) -->
-<div class="grid grid-cols-12 min-h-screen bg-[#1a1a1e] pt-14 md:pt-0">
+<div class="grid grid-cols-12 h-screen overflow-hidden bg-[#1a1a1e] pt-14 md:pt-0">
 
   <!-- ✅ SIDEBAR -->
   <aside class="col-span-8 sm:col-span-5 md:col-span-2 bg-[#141414] z-50 transform transition-transform duration-300 flex flex-col justify-between p-6 text-[14px] font-normal h-screen
@@ -70,13 +70,12 @@
           <i class="far fa-bell text-lg w-5"></i>
           <span class="md:hidden lg:inline">Reminder</span>
         </a>
-
       </nav>
     </div>
   </aside>
 
   <!-- ✅ MAIN CONTENT -->
-  <main class="col-span-12 md:col-span-10 p-6 md:p-8 text-white overflow-y-auto md:ml-0 ml-0">
+  <main class="col-span-12 md:col-span-10 p-6 md:p-8 text-white overflow-y-auto h-full">
     <router-outlet></router-outlet>
   </main>
 </div>
