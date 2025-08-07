@@ -18,6 +18,7 @@ export class MovieDetailComponent implements OnInit {
   currentSeasonIndex: number = 0;
   seasons: any[] = [];
   relatedMovies: any[] = [];
+isLoading: boolean = true; // 🔄 Loading state
 
   responsiveOptions: any[] = [
     { breakpoint: '1024px', numVisible: 7, numScroll: 5 },
@@ -36,25 +37,29 @@ export class MovieDetailComponent implements OnInit {
     this.loadMovieData(slug);
   });
 }
-  private loadMovieData(slug: string) {
-    this.movieService.getMovieDetail(slug).subscribe(res => {
-      this.movie = res.data;
-      this.initializeSeasons();
+loadMovieData(slug: string) {
+  this.isLoading = true; // 👉 Bắt đầu loading
 
-      // 🔁 Lấy slug thể loại đầu tiên
-      const firstGenre = this.movie.breadCrumb?.find((b: any) =>
-        b.slug?.includes('/the-loai')
-      );
-      if (firstGenre?.slug) {
-        const genreSlug = firstGenre.slug.split('/').pop(); // Lấy phần cuối slug
-        this.loadRelatedMovies(genreSlug, slug); // truyền thêm slug hiện tại để loại trừ
-      }
-    });
+  this.movieService.getMovieDetail(slug).subscribe(res => {
+    this.movie = res.data;
+    this.initializeSeasons();
+    this.isLoading = false; // ✅ Dừng loading
 
-    this.movieService.getMovieCast(slug).subscribe(res => {
-      this.castList = res.data.peoples || [];
-    });
-  }
+    // 🔁 Lấy slug thể loại đầu tiên
+    const firstGenre = this.movie.breadCrumb?.find((b: any) =>
+      b.slug?.includes('/the-loai')
+    );
+    if (firstGenre?.slug) {
+      const genreSlug = firstGenre.slug.split('/').pop();
+      this.loadRelatedMovies(genreSlug, slug);
+    }
+  });
+
+  this.movieService.getMovieCast(slug).subscribe(res => {
+    this.castList = res.data.peoples || [];
+  });
+}
+
 
   loadRelatedMovies(genreSlug: string, currentSlug: string) {
     this.movieService.getMoviesByGenre(genreSlug).subscribe(res => {

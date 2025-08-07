@@ -22,6 +22,7 @@ import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { MovieCountryComponent } from './pages/movie-country/movie-country.component';
 import { TvShowsComponent } from './pages/tv-shows/tv-shows.component';
 import { MovieListAnimationHomeComponent } from './pages/movie-list-animation-home/movie-list-animation-home.component';
+import { MovieRandomeComponent } from './pages/movie-randome/movie-randome.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MovieListAnimationHomeComponent } from './pages/movie-list-animation-ho
     SearchPageComponent,
     MovieCountryComponent,
     TvShowsComponent,
-    MovieListAnimationHomeComponent
+    MovieListAnimationHomeComponent,
+    MovieRandomeComponent
   ],
   imports: [
     BrowserModule,
