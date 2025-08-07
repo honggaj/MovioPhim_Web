@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class MovieService {
   private baseUrl = 'https://ophim1.com/v1/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Trang chủ
   getHome(): Observable<any> {
@@ -19,25 +19,26 @@ export class MovieService {
   getMoviesBySlug(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/danh-sach/${slug}`);
   }
-// Shortcut cho từng loại
-getPhimMoi(): Observable<any> {
-  return this.getMoviesBySlug('phim-moi');
-}
+  getTvShow(): Observable<any> {
+    return this.getMoviesBySlug('tv-shows');
+  }
+  // Shortcut cho từng loại
+  getPhimMoi(): Observable<any> {
+    return this.getMoviesBySlug('phim-moi');
+  }
 
-getPhimLe(): Observable<any> {
-  return this.getMoviesBySlug('phim-le');
-}
+  getPhimLe(): Observable<any> {
+    return this.getMoviesBySlug('phim-le');
+  }
 
-getPhimBo(): Observable<any> {
-  return this.getMoviesBySlug('phim-bo');
-}
-getTvShow(): Observable<any> {
-  return this.getMoviesBySlug('tv-shows');
-}
+  getPhimBo(): Observable<any> {
+    return this.getMoviesBySlug('phim-bo');
+  }
 
-getHoatHinh(): Observable<any> {
-  return this.getMoviesBySlug('hoat-hinh');
-}
+
+  getHoatHinh(): Observable<any> {
+    return this.getMoviesBySlug('hoat-hinh');
+  }
   // Tìm kiếm phim theo từ khoá
   searchMovies(keyword: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/tim-kiem`, {
@@ -51,19 +52,19 @@ getHoatHinh(): Observable<any> {
   }
 
   // Danh sách phim theo thể loại
-getMoviesByGenre(slug: string): Observable<any> {
-  return this.http.get(`${this.baseUrl}/the-loai/${slug}`);
-}
+  getMoviesByGenre(slug: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/the-loai/${slug}`);
+  }
 
-// Danh sách quốc gia
-getCountries(): Observable<any> {
-  return this.http.get(`${this.baseUrl}/quoc-gia`);
-}
+  // Danh sách quốc gia
+  getCountries(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/quoc-gia`);
+  }
 
-// Danh sách phim theo quốc gia
-getMoviesByCountry(slug: string): Observable<any> {
-  return this.http.get(`${this.baseUrl}/quoc-gia/${slug}`);
-}
+  // Danh sách phim theo quốc gia
+  getMoviesByCountry(slug: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/quoc-gia/${slug}`);
+  }
 
 
   // Lấy thông tin phim

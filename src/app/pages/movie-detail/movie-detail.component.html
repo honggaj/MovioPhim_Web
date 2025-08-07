@@ -3,11 +3,8 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Poster -->
     <div>
-      <img
-        [src]="'https://img.ophim.live/uploads/movies/' + movie?.item?.poster_url"
-        [alt]="movie?.item?.name"
-        class="rounded-lg shadow w-full h-auto"
-      />
+      <img [src]="'https://img.ophim.live/uploads/movies/' + movie?.item?.poster_url" [alt]="movie?.item?.name"
+        class="rounded-lg shadow w-full h-auto" />
     </div>
 
     <!-- Info -->
@@ -18,33 +15,45 @@
           {{ movie?.item?.origin_name }} • {{ movie?.item?.year }} • {{ movie?.item?.time }}
         </p>
         <p class="text-gray-400 text-sm mb-3">
-          {{ movie?.item?.lang }} • {{ movie?.item?.quality }} • {{ movie?.item?.episode_current }} / {{ movie?.item?.episode_total }}
+          {{ movie?.item?.lang }} • {{ movie?.item?.quality }} • {{ movie?.item?.episode_current }} / {{
+          movie?.item?.episode_total }}
         </p>
         <div class="text-sm text-gray-300 mb-3" [innerHTML]="movie?.item?.content"></div>
 
         <div class="text-sm space-y-1">
           <p><strong>Đạo diễn:</strong> {{ movie?.seoOnPage?.seoSchema?.director || 'Đang cập nhật' }}</p>
-          <p><strong>Diễn viên:</strong> {{ movie?.item?.actor?.join(', ') || 'Đang cập nhật' }}</p>
+          <!-- <p><strong>Diễn viên:</strong> {{ movie?.item?.actor?.join(', ') || 'Đang cập nhật' }}</p> -->
           <p><strong>Thể loại:</strong> {{ getBreadCrumbNames('the-loai') }}</p>
           <p><strong>Quốc gia:</strong> {{ getBreadCrumbNames('quoc-gia') }}</p>
+          <!-- 🎭 Diễn viên Carousel -->
+          <p><strong>Các diễn viên:</strong></p>
+
+          <p-carousel *ngIf="castList.length > 0" [value]="castList" [numVisible]="10" [numScroll]="8" [circular]="true"
+            [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions" [showIndicators]="false"
+            [showNavigators]="true" styleClass="custom-carousel">
+            <ng-template pTemplate="item" let-actor>
+              <div class="text-center p-2">
+                <img [src]="'https://image.tmdb.org/t/p/w185' + actor.profile_path" (error)="onImgError($event)"
+                  [alt]="actor.name" class="rounded-lg w-full h-auto mb-2" />
+
+                <p class="font-semibold text-sm">{{ actor.name }}</p>
+                <p class="text-xs text-gray-400">{{ actor.character }}</p>
+              </div>
+            </ng-template>
+          </p-carousel>
         </div>
       </div>
 
       <!-- 🔘 Action Buttons -->
-      <div class="flex gap-4 mt-4">
-        <button
-          *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
+      <div class="flex justify-center items-center gap-4 mt-4">
+        <button *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
           (click)="setEpisode(movie.item.episodes[0].server_data[0]?.link_embed)"
-          class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white font-semibold"
-        >
+          class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white font-semibold">
           ▶ Xem phim
         </button>
 
-        <button
-          *ngIf="movie?.item?.trailer_url"
-          (click)="toggleTrailer()"
-          class="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded text-white font-semibold"
-        >
+        <button *ngIf="movie?.item?.trailer_url" (click)="toggleTrailer()"
+          class="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded text-white font-semibold">
           🎬 Xem trailer
         </button>
       </div>
@@ -54,37 +63,25 @@
   <!-- 🎬 Trailer -->
   <div class="mt-6" *ngIf="showTrailer && movie?.item?.trailer_url">
     <h2 class="text-lg font-semibold mb-2">Trailer</h2>
-    <iframe
-      [src]="movie?.item?.trailer_url | youtubeEmbed"
-      frameborder="0"
-      allowfullscreen
-      class="w-full h-[400px] rounded-lg"
-    ></iframe>
+    <iframe [src]="movie?.item?.trailer_url | youtubeEmbed" frameborder="0" allowfullscreen
+      class="w-full h-auto rounded-lg"></iframe>
   </div>
 
   <!-- 🎥 Video Player -->
   <div class="mt-6" *ngIf="selectedEpisodeLink">
     <h2 class="text-lg font-semibold mb-2">Đang xem</h2>
-    <iframe
-      [src]="selectedEpisodeLink | safeUrl"
-      frameborder="0"
-      allowfullscreen
-      class="w-full h-[500px] rounded-lg"
-    ></iframe>
+    <iframe [src]="selectedEpisodeLink | safeUrl" frameborder="0" allowfullscreen
+      class="w-full h-auto rounded-lg"></iframe>
   </div>
 
   <!-- 📺 Danh sách tập -->
   <div class="mt-8" *ngIf="movie?.item?.episodes?.[0]?.server_data?.length">
     <h2 class="text-xl font-semibold mb-2">Danh sách tập</h2>
     <div class="flex flex-wrap gap-2">
-      <button
-        *ngFor="let ep of movie.item.episodes[0].server_data"
-        (click)="setEpisode(ep.link_embed)"
-        class="px-3 py-1 bg-zinc-800 rounded hover:bg-zinc-700 text-sm"
-        [ngClass]="{
+      <button *ngFor="let ep of movie.item.episodes[0].server_data" (click)="setEpisode(ep.link_embed)"
+        class="px-3 py-1 bg-zinc-800 rounded hover:bg-zinc-700 text-sm" [ngClass]="{
           'bg-zinc-700 text-red-500': selectedEpisodeLink === ep.link_embed
-        }"
-      >
+        }">
         Tập {{ ep.name }}
       </button>
     </div>
