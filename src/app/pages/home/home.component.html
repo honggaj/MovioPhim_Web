@@ -1,3 +1,4 @@
+
 <div class="flex items-center gap-2 w-full  mx-auto mb-6">
   <input type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm phim..."
     class="border-none bg-[#2e2e2e] text-white placeholder-gray-400 px-4 py-2 rounded flex-1 focus:outline-none focus:ring-1 focus:ring-red-900" />
@@ -13,14 +14,18 @@
   <div class="md:col-span-10">
     <app-movie-banner></app-movie-banner>
     <app-movie-list-animation-home></app-movie-list-animation-home>
-<div class="fb-comments-container bg-black p-4    w-full max-w-xs md:max-w-full overflow-auto mt-4">
-  <div class="fb-comments" data-href="http://animevietsub.tv" data-width="100%" data-numposts="4"></div>
-</div>
+
 
   </div>
 
   <!-- Bên phải: nằm dưới ở mobile, hẹp hơn ở desktop -->
-  <div class="md:col-span-2">
+ <div class="md:col-span-2">
+  <div class="h-full max-h-[80vh] overflow-y-auto">
     <app-movie-list-new></app-movie-list-new>
   </div>
+</div>
+
+</div>
+<div class="fb-comments-container bg-black p-4    w-full  overflow-auto mt-4">
+  <div class="fb-comments" data-href="http://animevietsub.tv" data-width="100%" data-numposts="4"></div>
 </div>

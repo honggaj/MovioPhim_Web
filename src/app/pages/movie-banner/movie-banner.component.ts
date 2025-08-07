@@ -11,27 +11,27 @@ export class MovieBannerComponent {
   banners = [
     {
       slug: 'tougen-anki',
-    name: 'Tougen Anki',
+      name: 'Tougen Anki',
       poster_url: 'tougen-anki-poster.jpg',
-  
+
     },
     {
       slug: 'gachiakuta',
-   name: 'Gachiakuta',
+      name: 'Gachiakuta',
       poster_url: 'gachiakuta-poster.jpg',
-    
+
     },
     {
       slug: 'sat-thu-ve-vuon',
-    name: 'Sát Thủ Về Vườn',
+      name: 'Sát Thủ Về Vườn',
       poster_url: 'sat-thu-ve-vuon-poster.jpg',
-    
+
     },
     {
       slug: 'khai-huyen-di-gioi-mynoghra-chinh-phuc-the-gioi-tu-nen-van-minh-suy-tan',
-    name: 'Khai Huyền Di Giới: Mynoghra - Chinh Phục Thế Giới Từ Nền Văn Minh Suy Tàn',
+      name: 'Khai Huyền Di Giới: Mynoghra - Chinh Phục Thế Giới Từ Nền Văn Minh Suy Tàn',
       poster_url: 'khai-huyen-di-gioi-mynoghra-chinh-phuc-the-gioi-tu-nen-van-minh-suy-tan-poster.jpg',
-    
+
     }
   ];
 
@@ -41,7 +41,7 @@ export class MovieBannerComponent {
     { breakpoint: '560px', numVisible: 1, numScroll: 1 }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   goToDetail(slug: string): void {
     this.router.navigate(['/phim', slug]);

@@ -1,8 +1,7 @@
+// movie-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { MovieService } from '../../services/movie.service';
-import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 
 @Component({
   selector: 'app-movie-detail',
@@ -13,68 +12,95 @@ import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 export class MovieDetailComponent implements OnInit {
   slug: string = '';
   movie: any;
-castList: any[] = []; // danh sách diễn viên
-responsiveOptions: any[] = [
-  {
-    breakpoint: '1024px',
-    numVisible: 5,
-    numScroll: 3
-  },
-  {
-    breakpoint: '768px',
-    numVisible: 3,
-    numScroll: 2
-  },
-  {
-    breakpoint: '560px',
-    numVisible: 2,
-    numScroll: 1
-  }
-];
+  castList: any[] = [];
   selectedEpisodeLink: string | null = null;
   showTrailer: boolean = false;
+  currentSeasonIndex: number = 0;
+  seasons: any[] = [];
+  relatedMovies: any[] = [];
+
+  responsiveOptions: any[] = [
+    { breakpoint: '1024px', numVisible: 7, numScroll: 5 },
+    { breakpoint: '768px', numVisible: 5, numScroll: 3 },
+    { breakpoint: '560px', numVisible: 3, numScroll: 2 }
+  ];
 
   constructor(
     private route: ActivatedRoute,
-    private movieService: MovieService // xài service chứ đừng gọi http tay
+    private movieService: MovieService
   ) { }
 
- ngOnInit() {
-  const slug = this.route.snapshot.paramMap.get('slug');
-  if (slug) {
-    // Lấy chi tiết phim
+ ngOnInit(): void {
+  this.route.params.subscribe(params => {
+    const slug = params['slug'];
+    this.loadMovieData(slug);
+  });
+}
+  private loadMovieData(slug: string) {
     this.movieService.getMovieDetail(slug).subscribe(res => {
       this.movie = res.data;
+      this.initializeSeasons();
+
+      // 🔁 Lấy slug thể loại đầu tiên
+      const firstGenre = this.movie.breadCrumb?.find((b: any) =>
+        b.slug?.includes('/the-loai')
+      );
+      if (firstGenre?.slug) {
+        const genreSlug = firstGenre.slug.split('/').pop(); // Lấy phần cuối slug
+        this.loadRelatedMovies(genreSlug, slug); // truyền thêm slug hiện tại để loại trừ
+      }
     });
 
-    // Lấy danh sách diễn viên
     this.movieService.getMovieCast(slug).subscribe(res => {
       this.castList = res.data.peoples || [];
-      console.log("🎭 Diễn viên:", this.castList);
     });
   }
-}
+
+  loadRelatedMovies(genreSlug: string, currentSlug: string) {
+    this.movieService.getMoviesByGenre(genreSlug).subscribe(res => {
+      this.relatedMovies = res.data.items.filter((m: any) => m.slug !== currentSlug).slice(0, 10); // loại trừ phim hiện tại
+    });
+  }
+
+
+  initializeSeasons() {
+    if (this.movie?.item?.episodes) {
+      this.seasons = this.movie.item.episodes.map((season: any, index: number) => ({
+        number: index + 1,
+        name: season.server_name || `Mùa ${index + 1}`,
+        episodes: season.server_data || []
+      }));
+    }
+  }
+
+  selectSeason(seasonNumber: number) {
+    this.selectedEpisodeLink = null; // Reset episode selection
+  }
+
+  setEpisode(link: string) {
+    this.selectedEpisodeLink = link;
+    this.showTrailer = false;
+  }
+
+  toggleTrailer() {
+    this.showTrailer = !this.showTrailer;
+    this.selectedEpisodeLink = null;
+  }
 
   getBreadCrumbNames(type: 'the-loai' | 'quoc-gia'): string {
     const items = this.movie?.breadCrumb?.filter((b: any) =>
       b.slug?.includes(`/${type}`)
     )?.map((b: any) => b.name);
-
     return items?.length ? items.join(', ') : 'Đang cập nhật';
   }
-  setEpisode(link: string) {
-    this.selectedEpisodeLink = link;
-    this.showTrailer = false; // Tắt trailer khi bật phim
-  }
 
-  toggleTrailer() {
-    this.showTrailer = !this.showTrailer;
-    this.selectedEpisodeLink = null; // Tắt phim khi bật trailer
+  onImgError = (event: Event): void => {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/images/no_image.png';
   }
-  onImgError(event: Event) {
-  const imgElement = event.target as HTMLImageElement;
-  imgElement.src = 'assets/images/no_image.png';
-}
-
+  changeSeason(index: number) {
+    this.currentSeasonIndex = index;
+    this.selectedEpisodeLink = null; // Reset player khi đổi mùa
+  }
 
 }

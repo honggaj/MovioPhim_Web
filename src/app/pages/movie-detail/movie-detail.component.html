@@ -1,89 +1,132 @@
-<div class="p-4 bg-black text-white min-h-screen">
-  <!-- 🖼️ Poster + Info Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Poster -->
+<div class="bg-black text-white min-h-screen py-8">
+  <div class="max-w-screen-lg mx-auto px-4 space-y-10">
+
+    <!-- 🎬 Poster + Thumb -->
+    <div class="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden rounded-xl shadow-lg">
+      <img [src]="'https://img.ophim.live/uploads/movies/' + movie.item.poster_url" class="w-full h-full object-cover"
+        [alt]="movie.item.name + ' poster'" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <img [src]="'https://img.ophim.live/uploads/movies/' + movie.item.thumb_url"
+          class="w-32 md:w-40 lg:w-44 rounded-xl shadow-2xl ring-2 ring-white/10 hover:scale-105 transition-transform duration-300" />
+      </div>
+    </div>
+
+    <!-- ℹ️ Thông tin phim -->
+    <div class="space-y-3">
+      <h1 class="text-4xl font-extrabold tracking-wide">{{ movie?.item?.name }}</h1>
+
+      <p class="text-gray-400 text-sm">
+        {{ movie?.item?.origin_name }} • {{ movie?.item?.year }} • {{ movie?.item?.time }}
+      </p>
+
+      <p class="text-gray-400 text-sm">
+        {{ movie?.item?.lang }} • {{ movie?.item?.quality }} •
+        {{ movie?.item?.episode_current }} / {{ movie?.item?.episode_total }}
+      </p>
+
+      <div class="text-base leading-relaxed text-gray-300" [innerHTML]="movie?.item?.content"></div>
+
+      <div class="text-sm text-gray-400 space-y-1 mt-4">
+        <p><strong class="text-white">Đạo diễn:</strong> {{ movie?.seoOnPage?.seoSchema?.director || 'Đang cập nhật' }}
+        </p>
+        <p><strong class="text-white">Ngày phát hành:</strong> {{ movie?.seoOnPage?.seoSchema?.datePublished |
+          date:'dd/MM/yyyy' }}</p>
+        <p><strong class="text-white">Thể loại:</strong> {{ getBreadCrumbNames('the-loai') }}</p>
+        <p><strong class="text-white">Quốc gia:</strong> {{ getBreadCrumbNames('quoc-gia') }}</p>
+      </div>
+    </div>
+
+    <!-- 🎭 Diễn viên -->
     <div>
-      <img [src]="'https://img.ophim.live/uploads/movies/' + movie?.item?.poster_url" [alt]="movie?.item?.name"
-        class="rounded-lg shadow w-full h-auto" />
+      <h2 class="text-2xl font-semibold mb-3">Diễn viên</h2>
+      <p-carousel *ngIf="castList.length > 0" [value]="castList" [numVisible]="10" [numScroll]="8" [circular]="true"
+        [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions" [showIndicators]="false"
+        [showNavigators]="true" styleClass="custom-carousel">
+        <ng-template pTemplate="item" let-actor>
+          <div class="text-center p-2">
+            <img [src]="'https://image.tmdb.org/t/p/w185' + actor.profile_path" (error)="onImgError($event)"
+              [alt]="actor.name"
+              class="rounded-lg w-full h-auto mb-2 object-cover aspect-[2/3] shadow-lg ring-1 ring-white/10" />
+            <p class="font-semibold text-sm">{{ actor.name }}</p>
+            <p class="text-xs text-gray-400">{{ actor.character }}</p>
+          </div>
+        </ng-template>
+      </p-carousel>
     </div>
 
-    <!-- Info -->
-    <div class="md:col-span-2 flex flex-col justify-between space-y-4">
-      <div>
-        <h1 class="text-3xl font-bold mb-2">{{ movie?.item?.name }}</h1>
-        <p class="text-gray-400 text-sm mb-1">
-          {{ movie?.item?.origin_name }} • {{ movie?.item?.year }} • {{ movie?.item?.time }}
-        </p>
-        <p class="text-gray-400 text-sm mb-3">
-          {{ movie?.item?.lang }} • {{ movie?.item?.quality }} • {{ movie?.item?.episode_current }} / {{
-          movie?.item?.episode_total }}
-        </p>
-        <div class="text-sm text-gray-300 mb-3" [innerHTML]="movie?.item?.content"></div>
+    <!-- 🔘 Buttons -->
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      <button *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
+        (click)="setEpisode(movie.item.episodes[0].server_data[0]?.link_embed)"
+        class="bg-red-600 hover:bg-red-700 px-6 py-2.5 rounded-full text-white font-semibold transition duration-200 shadow-md">
+        ▶ Xem phim
+      </button>
 
-        <div class="text-sm space-y-1">
-          <p><strong>Đạo diễn:</strong> {{ movie?.seoOnPage?.seoSchema?.director || 'Đang cập nhật' }}</p>
-          <!-- <p><strong>Diễn viên:</strong> {{ movie?.item?.actor?.join(', ') || 'Đang cập nhật' }}</p> -->
-          <p><strong>Thể loại:</strong> {{ getBreadCrumbNames('the-loai') }}</p>
-          <p><strong>Quốc gia:</strong> {{ getBreadCrumbNames('quoc-gia') }}</p>
-          <!-- 🎭 Diễn viên Carousel -->
-          <p><strong>Các diễn viên:</strong></p>
-
-          <p-carousel *ngIf="castList.length > 0" [value]="castList" [numVisible]="10" [numScroll]="8" [circular]="true"
-            [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions" [showIndicators]="false"
-            [showNavigators]="true" styleClass="custom-carousel">
-            <ng-template pTemplate="item" let-actor>
-              <div class="text-center p-2">
-                <img [src]="'https://image.tmdb.org/t/p/w185' + actor.profile_path" (error)="onImgError($event)"
-                  [alt]="actor.name" class="rounded-lg w-full h-auto mb-2" />
-
-                <p class="font-semibold text-sm">{{ actor.name }}</p>
-                <p class="text-xs text-gray-400">{{ actor.character }}</p>
-              </div>
-            </ng-template>
-          </p-carousel>
-        </div>
-      </div>
-
-      <!-- 🔘 Action Buttons -->
-      <div class="flex justify-center items-center gap-4 mt-4">
-        <button *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
-          (click)="setEpisode(movie.item.episodes[0].server_data[0]?.link_embed)"
-          class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white font-semibold">
-          ▶ Xem phim
-        </button>
-
-        <button *ngIf="movie?.item?.trailer_url" (click)="toggleTrailer()"
-          class="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded text-white font-semibold">
-          🎬 Xem trailer
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🎬 Trailer -->
-  <div class="mt-6" *ngIf="showTrailer && movie?.item?.trailer_url">
-    <h2 class="text-lg font-semibold mb-2">Trailer</h2>
-    <iframe [src]="movie?.item?.trailer_url | youtubeEmbed" frameborder="0" allowfullscreen
-      class="w-full h-auto rounded-lg"></iframe>
-  </div>
-
-  <!-- 🎥 Video Player -->
-  <div class="mt-6" *ngIf="selectedEpisodeLink">
-    <h2 class="text-lg font-semibold mb-2">Đang xem</h2>
-    <iframe [src]="selectedEpisodeLink | safeUrl" frameborder="0" allowfullscreen
-      class="w-full h-auto rounded-lg"></iframe>
-  </div>
-
-  <!-- 📺 Danh sách tập -->
-  <div class="mt-8" *ngIf="movie?.item?.episodes?.[0]?.server_data?.length">
-    <h2 class="text-xl font-semibold mb-2">Danh sách tập</h2>
-    <div class="flex flex-wrap gap-2">
-      <button *ngFor="let ep of movie.item.episodes[0].server_data" (click)="setEpisode(ep.link_embed)"
-        class="px-3 py-1 bg-zinc-800 rounded hover:bg-zinc-700 text-sm" [ngClass]="{
-          'bg-zinc-700 text-red-500': selectedEpisodeLink === ep.link_embed
-        }">
-        Tập {{ ep.name }}
+      <button *ngIf="movie?.item?.trailer_url" (click)="toggleTrailer()"
+        class="bg-zinc-700 hover:bg-zinc-600 px-6 py-2.5 rounded-full text-white font-semibold transition duration-200 shadow-md">
+        🎬 Xem trailer
       </button>
     </div>
+
+    <!-- 🎬 Trailer -->
+    <div *ngIf="showTrailer && movie?.item?.trailer_url">
+      <h2 class="text-xl font-semibold mb-2">Trailer</h2>
+      <iframe [src]="movie?.item?.trailer_url | youtubeEmbed" frameborder="0" allowfullscreen
+        class="w-full aspect-video rounded-xl shadow-lg">
+      </iframe>
+    </div>
+
+    <!-- 📺 Video Player -->
+    <div *ngIf="selectedEpisodeLink">
+      <h2 class="text-xl font-semibold mb-2">Đang xem</h2>
+      <iframe [src]="selectedEpisodeLink | safeUrl" frameborder="0" allowfullscreen
+        class="w-full aspect-video rounded-xl shadow-lg">
+      </iframe>
+    </div>
+
+    <!-- 📂 Chọn mùa -->
+    <div *ngIf="seasons.length > 1">
+      <h2 class="text-xl font-semibold mb-2">Chọn mùa</h2>
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let season of seasons; let i = index" (click)="changeSeason(i)"
+          class="px-3 py-1.5 bg-zinc-800 rounded-full hover:bg-zinc-700 text-sm transition"
+          [ngClass]="{ 'bg-red-600 text-white': currentSeasonIndex === i }">
+          {{ season.name || 'Mùa ' + (i + 1) }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 🎞️ Danh sách tập -->
+    <div *ngIf="movie?.item?.episodes?.[currentSeasonIndex]?.server_data?.length">
+      <h2 class="text-xl font-semibold mb-2 mt-4">Danh sách tập</h2>
+      <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+        <button *ngFor="let ep of movie.item.episodes[currentSeasonIndex].server_data"
+          (click)="setEpisode(ep.link_embed)"
+          class="w-full px-3 py-2 bg-zinc-800 rounded-md hover:bg-zinc-700 text-sm transition text-center"
+          [ngClass]="{ 'bg-zinc-700 text-red-500': selectedEpisodeLink === ep.link_embed }">
+          Tập {{ ep.name }}
+        </button>
+      </div>
+    </div>
+<!-- 🎞️ Phim liên quan -->
+<div *ngIf="relatedMovies.length > 0">
+  <h2 class="text-2xl font-semibold mb-3 mt-10">Phim liên quan</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <a *ngFor="let movie of relatedMovies"
+       [routerLink]="['/phim', movie.slug]"
+       class="block bg-zinc-900 hover:bg-zinc-800 transition rounded-lg overflow-hidden shadow-lg">
+      <img 
+        [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url"
+        class="w-full h-48 object-cover" 
+        [alt]="movie.name" />
+      <div class="p-2">
+        <h3 class="text-sm font-semibold truncate text-white">{{ movie.name }}</h3>
+        <p class="text-xs text-gray-400">{{ movie.origin_name }}</p>
+      </div>
+    </a>
+  </div>
+</div>
+
   </div>
 </div>

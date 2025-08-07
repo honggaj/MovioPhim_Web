@@ -6,7 +6,9 @@
 </div>
 
   <!-- Container cuộn -->
-  <div class="scrollbar-hide overflow-y-auto max-h-[700px] pr-1">
+<div class="scrollbar-hide overflow-y-auto 
+            max-h-[400px] sm:max-h-[500px] md:max-h-[600px] 
+            lg:max-h-[700px] xl:max-h-[800px] 2xl:max-h-[900px] pr-1">
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 gap-4">
       <div *ngFor="let movie of movies | slice:0:10" class="text-white bg-zinc-900 shadow rounded overflow-hidden">
         <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
