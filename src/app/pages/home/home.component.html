@@ -12,18 +12,23 @@
 
   <!-- Bên trái: rộng hơn trên màn to -->
   <div class="md:col-span-10">
-    <app-movie-banner></app-movie-banner>
+<div class="flex flex-col gap-4">
+        <app-movie-banner></app-movie-banner>
     <app-movie-list-animation-home></app-movie-list-animation-home>
+    </div>
+  
 
 
   </div>
 
   <!-- Bên phải: nằm dưới ở mobile, hẹp hơn ở desktop -->
  <div class="md:col-span-2">
-  <div class="h-full max-h-[80vh] overflow-y-auto">
-    <app-movie-randome></app-movie-randome>
-    <app-movie-list-new></app-movie-list-new>
-  </div>
+<div class="flex flex-col gap-4">
+  <app-movie-randome></app-movie-randome>
+  <app-movie-list-new></app-movie-list-new>
+</div>
+
+
 </div>
 
 </div>
