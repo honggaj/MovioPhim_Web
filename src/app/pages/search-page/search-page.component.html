@@ -1,48 +1,93 @@
-<div class="flex items-center gap-2 w-full mx-auto mb-6">
-  <input
-    type="text"
-    [(ngModel)]="keyword"
-    placeholder="Tìm kiếm phim..."
-    class="border-none bg-[#2e2e2e] text-white placeholder-gray-400 px-4 py-2 rounded flex-1 focus:outline-none focus:ring-1 focus:ring-red-900"
-  />
-  <button
-    (click)="onSearch()"
-    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded whitespace-nowrap"
-  >
-    Tìm
-  </button>
-</div>
+<!-- Bao ngoài để căn giữa, padding -->
+<div class="max-w-7xl p-4">
 
-<!-- Skeleton loading -->
-<div *ngIf="isLoading" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4 p-4 bg-black text-white">
-  <div *ngFor="let s of [1,2,3,4,5,6,7,8]" class="p-2 bg-zinc-800 rounded animate-pulse">
-    <div class="w-full h-40 bg-zinc-700 rounded mb-2"></div>
-    <div class="h-4 bg-zinc-700 rounded mb-1"></div>
-    <div class="h-3 bg-zinc-600 rounded w-2/3"></div>
-  </div>
-</div>
-
-<ng-container *ngIf="!isLoading && results.length > 0; else noResult">
-  <div class="p-4 bg-black text-white h-full">
-    <h2 class="mb-4">Các phim liên quan...</h2>
-    <div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4">
-      <div *ngFor="let movie of results | slice:0:20" class="p-2 text-white bg-zinc-900 shadow rounded">
-        <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
-          <img
-            [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url"
-            [alt]="movie.name"
-            class="w-full h-40 object-cover rounded"
-          />
-          <div class="p-2">
-            <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
-            <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
-          </div>
-        </a>
+  <!-- Thanh Search + Dropdown gợi ý, đẩy sang phải -->
+  <div class="flex justify-end mb-6">
+    <div class="relative w-full max-w-md">
+      <div class="relative">
+        <input
+          type="text"
+          [(ngModel)]="keyword"
+          (input)="onKeywordChange()"
+          (keydown.enter)="onSearch()"
+          placeholder="Tìm kiếm phim..."
+          class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 pr-12 rounded border border-gray-600 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20"
+        />
+        <i class="pi pi-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
       </div>
+
+      <ul
+        *ngIf="filteredSuggestions.length > 0"
+        class="absolute top-full left-0 right-0 bg-black text-white max-h-56 overflow-auto rounded shadow-xl border border-gray-600 z-50 mt-2"
+      >
+        <li
+          *ngFor="let s of filteredSuggestions"
+          (click)="selectSuggestion(s)"
+          class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-800 border-b border-gray-700 last:border-0"
+        >
+          <img
+            [src]="'https://img.ophim.live/uploads/movies/' + s.thumb_url"
+            [alt]="s.name"
+            class="w-12 h-16 object-cover rounded border border-gray-600"
+          />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-semibold text-white truncate">{{ s.name }}</h4>
+            <p class="text-sm text-gray-300 truncate">{{ s.origin_name }}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded">{{ s.quality }}</span>
+              <span class="text-xs text-gray-400">{{ s.year }}</span>
+              <span class="text-xs text-gray-400">{{ s.episode_current || 'Full' }}</span>
+            </div>
+          </div>
+          <i class="pi pi-arrow-right text-gray-400 text-sm"></i>
+        </li>
+      </ul>
     </div>
   </div>
-</ng-container>
 
-<ng-template #noResult>
-  <p *ngIf="!isLoading" class="text-white">Không tìm thấy phim nào.</p>
-</ng-template>
+  <!-- Kết quả Search (cách search input ra 1 khoảng margin) -->
+  <div *ngIf="isLoading" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4 p-4 bg-black text-white rounded mt-6">
+    <div *ngFor="let s of [1,2,3,4,5,6,7,8]" class="p-2 bg-zinc-800 rounded animate-pulse">
+      <div class="w-full h-40 bg-zinc-700 rounded mb-2"></div>
+      <div class="h-4 bg-zinc-700 rounded mb-1"></div>
+      <div class="h-3 bg-zinc-600 rounded w-2/3"></div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && results.length > 0; else noResult">
+    <div class="p-4 bg-black text-white h-full rounded mt-6">
+<h2
+  class="mb-4 border-b-2 border-red-600 pb-2
+         bg-gradient-to-r from-red-500 to-orange-400
+         hover:from-red-700 hover:to-orange-600
+         transition-all duration-300 ease-in-out
+         text-transparent bg-clip-text cursor-pointer
+         font-extrabold text-xl drop-shadow-md"
+>
+  Tìm Kiếm Phim: {{keyword}}
+</h2>
+
+
+      <div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4">
+        <div *ngFor="let movie of results | slice:0:20" class="p-2 text-white bg-zinc-900 shadow rounded">
+          <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
+            <img
+              [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url"
+              [alt]="movie.name"
+              class="w-full h-40 object-cover rounded"
+            />
+            <div class="p-2">
+              <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+              <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noResult>
+    <p *ngIf="!isLoading" class="text-white mt-6">Không tìm thấy phim nào.</p>
+  </ng-template>
+
+</div>

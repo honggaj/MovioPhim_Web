@@ -1,0 +1,88 @@
+<!-- Thanh chọn thể loại scroll ngang -->
+<div class="overflow-x-auto no-scrollbar">
+  <div class="flex gap-2 w-max">
+    <button *ngFor="let genre of genres" (click)="selectGenre(genre.slug)"
+      class="px-3 py-1 text-sm whitespace-nowrap transition h-9 rounded cursor-pointer" [ngClass]="{
+        'bg-red-700 text-white': genre.slug === activeGenreSlug,
+        'bg-gray-800 text-white': genre.slug !== activeGenreSlug
+      }">
+      {{ genre.name }}
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4 p-4 bg-black min-h-[70vh] rounded">
+  <!-- Skeleton loading -->
+  <ng-container *ngIf="isLoading; else movieList">
+    <div *ngFor="let i of [].constructor(12)" class="animate-pulse bg-gray-800 rounded p-3">
+      <div class="h-40 bg-gray-700 rounded mb-2"></div>
+      <div class="h-3 bg-gray-700 rounded w-3/4 mb-1"></div>
+      <div class="h-3 bg-gray-700 rounded w-1/2 mb-2"></div>
+      <div class="flex gap-2">
+        <div class="h-4 w-10 bg-gray-700 rounded"></div>
+        <div class="h-4 w-10 bg-gray-700 rounded"></div>
+      </div>
+    </div>
+  </ng-container>
+
+   <ng-template #movieList>
+        <div *ngFor="let movie of paginatedMovies"
+          class="relative text-white bg-zinc-900 shadow rounded overflow-hidden">
+          <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
+            <!-- Badge chung -->
+               <div class="absolute top-0 left-1 z-10">
+                            <span
+                                class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white text-[10px] px-2 py-1 rounded shadow">
+                                {{ movie.quality }} + {{ movie.lang }}
+                            </span>
+                        </div>
+
+                        <div class="overflow-hidden relative">
+                            <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
+                                class="w-full h-40 object-cover rounded-t transform transition duration-300 hover:scale-105" />
+
+                            <div *ngIf="movie.episode_current" class="absolute bottom-1 right-1 z-10">
+                                <span class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600
+ text-white text-[10px] px-2 py-1 rounded shadow">
+                                    {{ movie.episode_current }}
+                                </span>
+                            </div>
+                        </div>
+
+            <!-- Category + Year -->
+            <div class="space-x-2 px-2 py-2">
+              <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+                {{ movie.category[0]?.name }}
+              </span>
+              <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+                {{ movie.year }}
+              </span>
+            </div>
+          </a>
+        </div>  
+      </ng-template>
+  <!-- Pagination nằm trong grid, căn giữa -->
+  <div *ngIf="!isLoading && totalPages > 1" class="col-span-full flex justify-center mt-6">
+    <div class="flex items-center gap-2 text-white">
+      <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+        class="px-3 py-1 bg-gray-700 rounded disabled:opacity-50">
+        Trước
+      </button>
+
+      <ng-container *ngFor="let page of pagesToShow">
+        <button (click)="changePage(page)" class="px-3 py-1 rounded" [ngClass]="{
+          'bg-red-600 text-white': currentPage === page,
+          'bg-gray-700 text-white': currentPage !== page
+        }">
+          {{ page }}
+        </button>
+      </ng-container>
+
+      <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"
+        class="px-3 py-1 bg-gray-700 rounded disabled:opacity-50">
+        Sau
+      </button>
+    </div>
+  </div>
+
+</div>

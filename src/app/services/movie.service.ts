@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, map, Observable, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +14,41 @@ export class MovieService {
   getHome(): Observable<any> {
     return this.http.get(`${this.baseUrl}/home`);
   }
+getHomeWithPoster(): Observable<any> {
+  return this.getHome().pipe(
+    switchMap((res: any) => {
+      const items = res.data.items;
+
+      // Gọi song song API detail để lấy poster_url + trailer_url
+      const detailRequests = items.map((movie: any) =>
+        this.getMovieDetail(movie.slug).pipe(
+          map((detail: any) => ({
+            ...movie,
+            poster_url: detail.data.item.poster_url,
+            trailer_url: detail.data.item.trailer_url, // 👈 lấy thêm trailer
+            quality: detail.data.item.quality,
+            lang: detail.data.item.lang,
+            type: detail.data.item.type,
+            year: detail.data.item.year,
+            view: detail.data.item.view,
+            episode_current: detail.data.item.episode_current
+          }))
+        )
+      );
+
+      return forkJoin(detailRequests);
+    })
+  );
+}
+getTopViewedMovies(slug = 'phim-le'): Observable<any[]> {
+  return this.getMoviesBySlug(slug).pipe(
+    map((res: any) => {
+      const movies = res.data.items;
+      // sort giảm dần theo view
+      return movies.sort((a: any, b: any) => (b.view || 0) - (a.view || 0));
+    })
+  );
+}
 
   // Danh sách phim theo slug (vd: phim-moi, phim-le, phim-bo, hoat-hinh,...)
   getMoviesBySlug(slug: string): Observable<any> {

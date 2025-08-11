@@ -63,7 +63,7 @@ loadMovieData(slug: string) {
 
   loadRelatedMovies(genreSlug: string, currentSlug: string) {
     this.movieService.getMoviesByGenre(genreSlug).subscribe(res => {
-      this.relatedMovies = res.data.items.filter((m: any) => m.slug !== currentSlug).slice(0, 10); // loại trừ phim hiện tại
+      this.relatedMovies = res.data.items.filter((m: any) => m.slug !== currentSlug).slice(0, 12); // loại trừ phim hiện tại
     });
   }
 

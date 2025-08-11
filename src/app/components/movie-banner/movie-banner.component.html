@@ -1,0 +1,82 @@
+<div class="py-4 bg-black ">
+  <p-carousel
+    [value]="banners"
+    [numVisible]="1"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="3000"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-movie pTemplate="item">
+      <div class="relative bg-black">
+        <!-- Poster -->
+        <a [routerLink]="['/phim', movie.slug]" class="block">
+          <img
+            [src]="'https://img.ophim.live/uploads/movies/' + movie.poster_url"
+            [alt]="movie.name"
+            loading="lazy"
+            class="w-full h-[200px] md:h-[400px] lg:h-[500px] object-cover object-center rounded"
+          />
+        </a>
+
+        <!-- Overlay -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 rounded-b ">
+          <!-- Tiêu đề -->
+          <h3 class="text-lg md:text-2xl font-bold text-white mb-3 truncate">
+            {{ movie.name }}
+          </h3>
+
+          <!-- Origin name (ẩn trên mobile) -->
+          <p class="hidden md:block text-sm text-gray-300 mb-3 truncate">
+            {{ movie.origin_name }}
+          </p>
+
+          <!-- Badges (ẩn trên mobile) -->
+          <div class="hidden md:flex flex-wrap gap-2 mb-3">
+            <span class="bg-red-600 text-white px-3 py-1 rounded text-xs font-medium">
+              {{ movie.quality }}
+            </span>
+            <span class="bg-gray-600 text-white px-3 py-1 rounded text-xs font-medium">
+              {{ movie.lang }}
+            </span>
+            <span
+              class="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium"
+              *ngIf="movie.status === 'ongoing'"
+            >
+              Đang phát
+            </span>
+          </div>
+
+          <!-- Info (ẩn trên mobile) -->
+          <div class="hidden md:flex flex-wrap gap-4 text-sm text-gray-200 mb-3">
+            <span>{{ movie.year }}</span>
+            <span>{{ movie.episode_current || 'Full' }}/{{ movie.episode_total || '' }}</span>
+            <span>{{ movie.time }}</span>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex flex-wrap gap-3">
+            <!-- Trailer -->
+           <a
+  *ngIf="movie.trailer_url"
+  [href]="movie.trailer_url"
+  target="_blank"
+  class="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white px-3 py-2 rounded text-xs md:text-sm font-medium transition"
+>
+  <i class="pi pi-play"></i> Trailer
+</a>
+
+
+            <!-- More Info -->
+            <a
+              [routerLink]="['/phim', movie.slug]"
+              class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded text-xs md:text-sm font-medium transition"
+            >
+              <i class="pi pi-info-circle"></i> More Info
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>

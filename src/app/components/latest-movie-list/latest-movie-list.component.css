@@ -1,0 +1,15 @@
+:host ::ng-deep .custom-carousel .p-carousel-item {
+  flex: 0 0 calc(100% / 6) !important; /* desktop */
+}
+
+@media (max-width: 1024px) {
+  :host ::ng-deep .custom-carousel .p-carousel-item {
+    flex: 0 0 calc(100% / 4) !important; /* tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .custom-carousel .p-carousel-item {
+    flex: 0 0 calc(100% / 2) !important; /* mobile */
+  }
+}

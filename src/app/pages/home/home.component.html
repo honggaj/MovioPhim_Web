@@ -1,37 +1,69 @@
+<div class="max-w-7xl p-4 mx-auto">
+  <div class="flex justify-end mb-6">
+    <div class="relative w-full max-w-md">
+      <!-- Search Input -->
+      <div class="relative">
+        <input
+          type="text"
+          [(ngModel)]="keyword"
+          (input)="onKeywordChange()"
+          (keydown.enter)="onSearch()"
+          placeholder="Tìm kiếm phim..."
+          class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 pr-12 rounded border border-gray-600 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20"
+        />
+        <i class="pi pi-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+      </div>
 
-<div class="flex items-center gap-2 w-full  mx-auto mb-6">
-  <input type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm phim..."
-    class="border-none bg-[#2e2e2e] text-white placeholder-gray-400 px-4 py-2 rounded flex-1 focus:outline-none focus:ring-1 focus:ring-red-900" />
-
-  <button (click)="onSearch()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded whitespace-nowrap cursor-pointer">
-    Tìm
-  </button>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-
-  <!-- Bên trái: rộng hơn trên màn to -->
-  <div class="md:col-span-10">
-<div class="flex flex-col gap-4">
-        <app-movie-banner></app-movie-banner>
-    <app-movie-list-animation-home></app-movie-list-animation-home>
+      <!-- Dropdown Suggestions -->
+      <ul
+        *ngIf="filteredSuggestions.length > 0"
+        class="absolute top-full left-0 right-0 bg-black text-white max-h-56 overflow-auto rounded shadow-xl border border-gray-600 z-50 mt-2"
+      >
+        <li
+          *ngFor="let s of filteredSuggestions"
+          (click)="selectSuggestion(s)"
+          class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-800 border-b border-gray-700 last:border-0"
+        >
+          <img
+            [src]="'https://img.ophim.live/uploads/movies/' + s.thumb_url"
+            [alt]="s.name"
+            class="w-12 h-16 object-cover rounded border border-gray-600"
+          />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-semibold text-white truncate">{{ s.name }}</h4>
+            <p class="text-sm text-gray-300 truncate">{{ s.origin_name }}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded">{{ s.quality }}</span>
+              <span class="text-xs text-gray-400">{{ s.year }}</span>
+              <span class="text-xs text-gray-400">{{ s.episode_current || 'Full' }}</span>
+            </div>
+          </div>
+          <i class="pi pi-arrow-right text-gray-400 text-sm"></i>
+        </li>
+      </ul>
     </div>
-  
-
-
   </div>
 
-  <!-- Bên phải: nằm dưới ở mobile, hẹp hơn ở desktop -->
- <div class="md:col-span-2">
-<div class="flex flex-col gap-4">
-  <app-movie-randome></app-movie-randome>
-  <app-movie-list-new></app-movie-list-new>
-</div>
+  <!-- FULL RỘNG -->
+  <div class="w-full flex flex-col gap-4 ">
+    <app-movie-banner></app-movie-banner>
+    <app-latest-movie-list></app-latest-movie-list>
+  </div>
 
+  <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 mt-6">
+    <div class="lg:col-span-4 rounded text-white">
+      <app-movie-single></app-movie-single>
+    </div>
+    <div class="lg:col-span-2 rounded text-white">
+      <app-top-rate></app-top-rate>
+    </div>
+  </div>
 
-</div>
+  <div class="w-full flex flex-col pt-4 gap-4">
+    <app-movie-series></app-movie-series>
+  </div>
 
-</div>
-<div class="fb-comments-container bg-black p-4    w-full  overflow-auto mt-4">
-  <div class="fb-comments" data-href="http://animevietsub.tv" data-width="100%" data-numposts="4"></div>
+  <div class="fb-comments-container bg-black p-4 w-full overflow-auto mt-4">
+    <div class="fb-comments" data-href="http://animevietsub.tv" data-width="100%" data-numposts="4"></div>
+  </div>
 </div>

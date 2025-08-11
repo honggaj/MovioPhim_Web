@@ -8,16 +8,11 @@ import { MovieService } from '../../services/movie.service';
   templateUrl: './search-page.component.html',
   styleUrl: './search-page.component.css'
 })
-
 export class SearchPageComponent {
   keyword: string = '';
   results: any[] = [];
-  isLoading: boolean = false; // 🆕 biến loading
-
-   rows: number = 12;
-  currentPage: number = 1;
-  totalPages: number = 1;
-  pagesToShow: number[] = [];
+  filteredSuggestions: any[] = [];
+  isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,22 +20,50 @@ export class SearchPageComponent {
     private router: Router
   ) {}
 
-  onSearch() {
-    if (this.keyword.trim()) {
-      this.router.navigate(['/tim-kiem'], { queryParams: { q: this.keyword } });
-    }
-  }
-
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.keyword = params['q'] || '';
       if (this.keyword.trim()) {
-        this.isLoading = true; // 🆕 Bắt đầu loading
-        this.movieService.searchMovies(this.keyword).subscribe(res => {
-          this.results = res.data?.items || [];
-          this.isLoading = false; // 🆕 Kết thúc loading
-        });
+        this.loadResults(this.keyword);
       }
+    });
+  }
+
+  onKeywordChange() {
+    const kw = this.keyword.trim();
+    if (kw.length > 0) {
+      this.movieService.searchMovies(kw).subscribe(res => {
+        this.filteredSuggestions = res.data?.items || [];
+      });
+    } else {
+      this.filteredSuggestions = [];
+    }
+  }
+
+  selectSuggestion(movie: any) {
+    this.router.navigate(['/phim', movie.slug]);
+    this.filteredSuggestions = [];
+    this.keyword = movie.name;
+  }
+
+onSearch() {
+  const kw = this.keyword.trim();
+  if (kw.length > 0) {
+    this.router.navigate(['/tim-kiem'], { queryParams: { q: kw } });
+    this.filteredSuggestions = [];
+  } else {
+    // keyword trống => về trang home luôn
+    this.router.navigate(['/']);
+    this.filteredSuggestions = [];
+  }
+}
+
+
+  loadResults(keyword: string) {
+    this.isLoading = true;
+    this.movieService.searchMovies(keyword).subscribe(res => {
+      this.results = res.data?.items || [];
+      this.isLoading = false;
     });
   }
 }

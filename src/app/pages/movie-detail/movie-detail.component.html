@@ -1,25 +1,28 @@
-<!-- 🔄 Skeleton Loading -->
+<!-- Skeleton Loading -->
 <div *ngIf="isLoading" class="animate-pulse space-y-6">
-  <div class="w-full h-64 sm:h-80 md:h-96 bg-zinc-800 rounded-xl"></div>
+  <div class="w-full h-64 sm:h-80 md:h-96 bg-zinc-700 dark:bg-zinc-800 rounded-xl"></div>
 
   <div class="space-y-3">
-    <div class="h-8 bg-zinc-800 rounded w-3/4"></div>
-    <div class="h-4 bg-zinc-700 rounded w-1/2"></div>
-    <div class="h-4 bg-zinc-700 rounded w-full"></div>
-    <div class="h-4 bg-zinc-700 rounded w-5/6"></div>
-    <div class="h-4 bg-zinc-700 rounded w-2/3"></div>
+    <div class="h-8 bg-zinc-700 dark:bg-zinc-800 rounded w-3/4"></div>
+    <div class="h-4 bg-zinc-600 dark:bg-zinc-700 rounded w-1/2"></div>
+    <div class="h-4 bg-zinc-600 dark:bg-zinc-700 rounded w-full"></div>
+    <div class="h-4 bg-zinc-600 dark:bg-zinc-700 rounded w-5/6"></div>
+    <div class="h-4 bg-zinc-600 dark:bg-zinc-700 rounded w-2/3"></div>
   </div>
 
   <div class="grid grid-cols-5 gap-4 mt-6">
-    <div *ngFor="let i of [1,2,3,4,5]" class="h-48 bg-zinc-800 rounded-lg"></div>
+    <div *ngFor="let i of [1,2,3,4,5]" class="h-48 bg-zinc-700 dark:bg-zinc-800 rounded-lg"></div>
   </div>
 </div>
+
 <div *ngIf="!isLoading">
-  <div class="bg-black text-white min-h-screen py-4 rounded">
+  <div class="min-h-screen py-4 rounded
+              bg-white text-gray-900
+              dark:bg-black dark:text-white">
     <div class="max-w-screen-lg mx-auto px-4 space-y-10">
 
-      <!-- 🎬 Poster + Thumb -->
-      <div class="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden  shadow-lg">
+      <!-- Poster + Thumb -->
+      <div class="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden shadow-lg">
         <img [src]="'https://img.ophim.live/uploads/movies/' + movie.item.poster_url"
           class="w-full h-full object-cover rounded-t-sm" [alt]="movie.item.name + ' poster'" />
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent "></div>
@@ -29,88 +32,31 @@
         </div>
       </div>
 
-      <!-- ℹ️ Thông tin phim -->
+      <!-- Info -->
       <div class="space-y-3">
         <h1 class="text-4xl font-extrabold tracking-wide">{{ movie?.item?.name }}</h1>
 
-        <p class="text-gray-400 text-sm">
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
           {{ movie?.item?.origin_name }} • {{ movie?.item?.year }} • {{ movie?.item?.time }}
         </p>
 
-        <p class="text-gray-400 text-sm">
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
           {{ movie?.item?.lang }} • {{ movie?.item?.quality }} •
           {{ movie?.item?.episode_current }} / {{ movie?.item?.episode_total }}
         </p>
 
-        <div class="text-base leading-relaxed text-gray-300" [innerHTML]="movie?.item?.content"></div>
+        <div class="text-base leading-relaxed text-gray-700 dark:text-gray-300" [innerHTML]="movie?.item?.content">
+        </div>
 
-        <div class="text-sm text-gray-400 space-y-1 mt-4">
-          <p><strong class="text-white">Đạo diễn:</strong> {{ movie?.seoOnPage?.seoSchema?.director || 'Đang cập nhật'
-            }}
-          </p>
-          <p><strong class="text-white">Ngày phát hành:</strong> {{ movie?.seoOnPage?.seoSchema?.datePublished |
-            date:'dd/MM/yyyy' }}</p>
-          <p><strong class="text-white">Thể loại:</strong> {{ getBreadCrumbNames('the-loai') }}</p>
-          <p><strong class="text-white">Quốc gia:</strong> {{ getBreadCrumbNames('quoc-gia') }}</p>
+        <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1 mt-4">
+          <p><strong class="text-gray-900 dark:text-white">Đạo diễn:</strong> {{ movie?.seoOnPage?.seoSchema?.director
+            || 'Đang cập nhật' }}</p>
+          <p><strong class="text-gray-900 dark:text-white">Ngày phát hành:</strong> {{
+            movie?.seoOnPage?.seoSchema?.datePublished | date:'dd/MM/yyyy' }}</p>
+          <p><strong class="text-gray-900 dark:text-white">Thể loại:</strong> {{ getBreadCrumbNames('the-loai') }}</p>
+          <p><strong class="text-gray-900 dark:text-white">Quốc gia:</strong> {{ getBreadCrumbNames('quoc-gia') }}</p>
         </div>
       </div>
-
-
-      <!-- 🔘 Buttons -->
-      <div class="grid grid-cols-2 gap-4">
-        <button *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
-          (click)="setEpisode(movie.item.episodes[0].server_data[0]?.link_embed)"
-          class="bg-red-600 hover:bg-red-700 px-6 py-2.5 rounded text-white font-semibold transition duration-200 shadow-md">
-          ▶ Xem phim
-        </button>
-
-        <button *ngIf="movie?.item?.trailer_url" (click)="toggleTrailer()"
-          class="bg-zinc-700 hover:bg-zinc-600 px-6 py-2.5 rounded text-white font-semibold transition duration-200 shadow-md">
-          🎬 Xem trailer
-        </button>
-      </div>
-
-      <!-- 🎬 Trailer -->
-      <div *ngIf="showTrailer && movie?.item?.trailer_url">
-        <h2 class="text-xl font-semibold mb-2">Trailer</h2>
-        <iframe [src]="movie?.item?.trailer_url | youtubeEmbed" frameborder="0" allowfullscreen
-          class="w-full aspect-video rounded-xl shadow-lg">
-        </iframe>
-      </div>
-
-      <!-- 📺 Video Player -->
-      <div *ngIf="selectedEpisodeLink">
-        <h2 class="text-xl font-semibold mb-2">Đang xem</h2>
-        <iframe [src]="selectedEpisodeLink | safeUrl" frameborder="0" allowfullscreen
-          class="w-full aspect-video rounded-xl shadow-lg">
-        </iframe>
-      </div>
-
-      <!-- 📂 Chọn mùa -->
-      <!-- <div *ngIf="seasons.length > 1">
-        <h2 class="text-xl font-semibold mb-2">Chọn mùa</h2>
-        <div class="flex flex-wrap gap-2">
-          <button *ngFor="let season of seasons; let i = index" (click)="changeSeason(i)"
-            class="px-3 py-1.5 bg-zinc-800 rounded-full hover:bg-zinc-700 text-sm transition"
-            [ngClass]="{ 'bg-red-600 text-white': currentSeasonIndex === i }">
-            {{ season.name || 'Mùa ' + (i + 1) }}
-          </button>
-        </div>
-      </div> -->
-
-      <!-- 🎞️ Danh sách tập -->
-      <div *ngIf="movie?.item?.episodes?.[currentSeasonIndex]?.server_data?.length">
-        <h2 class="text-xl font-semibold mb-2 mt-4">Danh sách tập</h2>
-        <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
-          <button *ngFor="let ep of movie.item.episodes[currentSeasonIndex].server_data"
-            (click)="setEpisode(ep.link_embed)"
-            class="w-full px-3 py-2 bg-zinc-800 rounded-md hover:bg-zinc-700 text-sm transition text-center"
-            [ngClass]="{ 'bg-zinc-700 text-red-500': selectedEpisodeLink === ep.link_embed }">
-            Tập {{ ep.name }}
-          </button>
-        </div>
-      </div>
-
       <!-- 🎭 Diễn viên -->
       <div>
         <h2 class="text-2xl font-semibold mb-3">Diễn viên</h2>
@@ -128,21 +74,94 @@
           </ng-template>
         </p-carousel>
       </div>
-      <!-- 🎞️ Phim liên quan -->
-      <div *ngIf="relatedMovies.length > 0">
-        <h2 class="text-2xl font-semibold mb-3 mt-10">Phim liên quan</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          <a *ngFor="let movie of relatedMovies" [routerLink]="['/phim', movie.slug]"
-            class="block bg-zinc-900 hover:bg-zinc-800 transition rounded-lg overflow-hidden shadow-lg">
-            <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" class="w-full h-48 object-cover"
-              [alt]="movie.name" />
-            <div class="p-2">
-              <h3 class="text-sm font-semibold truncate text-white">{{ movie.name }}</h3>
-              <p class="text-xs text-gray-400">{{ movie.origin_name }}</p>
-            </div>
-          </a>
+      <!-- Buttons -->
+      <div class="grid grid-cols-2 gap-4">
+        <button *ngIf="movie?.item?.episodes?.[0]?.server_data?.length"
+          (click)="setEpisode(movie.item.episodes[0].server_data[0]?.link_embed)"
+          class="bg-red-600 hover:bg-red-700 px-6 py-2.5 rounded text-white font-semibold transition duration-200 shadow-md">
+          ▶ Xem phim
+        </button>
+
+        <button *ngIf="movie?.item?.trailer_url" (click)="toggleTrailer()"
+          class="bg-zinc-700 hover:bg-zinc-600 dark:bg-zinc-800 dark:hover:bg-zinc-700 px-6 py-2.5 rounded text-white font-semibold transition duration-200 shadow-md">
+          🎬 Xem trailer
+        </button>
+      </div>
+
+
+      <!-- 🎬 Trailer -->
+      <div *ngIf="showTrailer && movie?.item?.trailer_url">
+        <h2 class="text-xl font-semibold mb-2">Trailer</h2>
+        <iframe [src]="movie?.item?.trailer_url | youtubeEmbed" frameborder="0" allowfullscreen
+          class="w-full aspect-video rounded-xl shadow-lg">
+        </iframe>
+      </div>
+
+      <!-- 📺 Video Player -->
+      <div *ngIf="selectedEpisodeLink">
+        <h2 class="text-xl font-semibold mb-2">Đang xem</h2>
+        <iframe [src]="selectedEpisodeLink | safeUrl" frameborder="0" allowfullscreen
+          class="w-full aspect-video rounded-xl shadow-lg">
+        </iframe>
+      </div>
+
+      <!-- 🎞️ Danh sách tập -->
+      <div *ngIf="movie?.item?.episodes?.[currentSeasonIndex]?.server_data?.length">
+        <h2 class="text-xl font-semibold mb-2 mt-4">Danh sách tập</h2>
+        <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+          <button *ngFor="let ep of movie.item.episodes[currentSeasonIndex].server_data"
+            (click)="setEpisode(ep.link_embed)"
+            class="w-full px-3 py-2 bg-zinc-800 rounded-md hover:bg-zinc-700 text-sm transition text-center"
+            [ngClass]="{ 'bg-zinc-700 text-red-500': selectedEpisodeLink === ep.link_embed }">
+            Tập {{ ep.name }}
+          </button>
         </div>
       </div>
+
+    <!-- Related movies -->
+<div *ngIf="relatedMovies.length > 0">
+  <h2 class="text-2xl font-semibold mb-3 mt-10">Phim liên quan</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black rounded">
+    <a *ngFor="let movie of relatedMovies" [routerLink]="['/phim', movie.slug]"
+      class="relative text-white bg-zinc-900 shadow rounded overflow-hidden block cursor-pointer
+             hover:bg-zinc-800 transition duration-300">
+      
+        <div class="absolute top-0 left-1 z-10">
+                            <span
+                                class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white text-[10px] px-2 py-1 rounded shadow">
+                                {{ movie.quality }} + {{ movie.lang }}
+                            </span>
+                        </div>
+
+                        <div class="overflow-hidden relative">
+                            <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
+                                class="w-full h-40 object-cover rounded-t transform transition duration-300 hover:scale-105" />
+
+                            <div *ngIf="movie.episode_current" class="absolute bottom-1 right-1 z-10">
+                                <span class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600
+ text-white text-[10px] px-2 py-1 rounded shadow">
+                                    {{ movie.episode_current }}
+                                </span>
+                            </div>
+                        </div>
+
+      <div class="p-2">
+        <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+        <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+      </div>
+
+      <div class="space-x-2 px-2 py-2">
+        <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+          {{ movie.category[0]?.name }}
+        </span>
+        <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+          {{ movie.year }}
+        </span>
+      </div>
+    </a>
+  </div>
+</div>
+
 
     </div>
   </div>
