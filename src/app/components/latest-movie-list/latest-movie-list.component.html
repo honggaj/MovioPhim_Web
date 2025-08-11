@@ -1,18 +1,18 @@
 <div class="p-4 bg-black text-white relative w-full rounded">
     <div class="flex items-center justify-between mb-4">
-  <h2 class="mb-4 border-b-2 border-red-600 pb-2
+        <h2 class="mb-4 border-b-2 border-red-600 pb-2
            bg-gradient-to-r from-red-500 to-yellow-400
            transition-all duration-300 ease-in-out
            text-transparent bg-clip-text cursor-pointer
            font-extrabold text-xl drop-shadow-md">
-    <img src="assets/icon/tv_show.gif" alt="Anime Icon" class="inline-block w-10 h-10 mr-2" />
-    Phim mới
-  </h2>
-  <!-- <button (click)="loadMore()" 
+            <img src="assets/icon/tv_show.gif" alt="Anime Icon" class="inline-block w-10 h-10 mr-2" />
+            Phim mới
+        </h2>
+        <!-- <button (click)="loadMore()" 
           class="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 text-white px-4 py-1 rounded whitespace-nowrap">
     Xem thêm
   </button> -->
-</div>
+    </div>
 
     <!-- Nút điều hướng -->
     <button (click)="scrollLeft()"
@@ -27,7 +27,7 @@
     <!-- Carousel -->
     <div #carousel class="flex overflow-x-auto scrollbar-hide space-x-4 snap-x snap-mandatory scroll-smooth px-1">
         <div *ngFor="let movie of movies" class="flex-shrink-0 bg-zinc-900 rounded shadow snap-start
-             w-[150px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px]">
+             w-[130px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px]">
             <a [routerLink]="['/phim', movie.slug]" class="block">
 
                 <!-- Bọc ảnh trong relative -->
