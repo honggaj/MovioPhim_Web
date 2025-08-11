@@ -1,4 +1,4 @@
-<div class="py-4 bg-black ">
+<div class="py-4 bg-black">
   <p-carousel
     [value]="banners"
     [numVisible]="1"
@@ -8,19 +8,24 @@
     [responsiveOptions]="responsiveOptions"
   >
     <ng-template let-movie pTemplate="item">
-      <div class="relative bg-black">
+      <div class="relative bg-black rounded">
         <!-- Poster -->
-        <a [routerLink]="['/phim', movie.slug]" class="block">
+        <a [routerLink]="['/phim', movie.slug]" class="block relative">
           <img
             [src]="'https://img.ophim.live/uploads/movies/' + movie.poster_url"
             [alt]="movie.name"
             loading="lazy"
             class="w-full h-[200px] md:h-[400px] lg:h-[500px] object-cover object-center rounded"
           />
+          <!-- Gradient overlay -->
+          <div
+            class="absolute top-0 left-0 w-full h-full rounded"
+            style="background: linear-gradient(to right, rgba(0,0,0,0.8), transparent); pointer-events: none;"
+          ></div>
         </a>
 
         <!-- Overlay -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 rounded-b ">
+        <div class="absolute bottom-0 left-0 right-0 p-4 rounded-b">
           <!-- Tiêu đề -->
           <h3 class="text-lg md:text-2xl font-bold text-white mb-3 truncate">
             {{ movie.name }}
@@ -57,15 +62,14 @@
           <!-- Buttons -->
           <div class="flex flex-wrap gap-3">
             <!-- Trailer -->
-           <a
-  *ngIf="movie.trailer_url"
-  [href]="movie.trailer_url"
-  target="_blank"
-  class="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white px-3 py-2 rounded text-xs md:text-sm font-medium transition"
->
-  <i class="pi pi-play"></i> Trailer
-</a>
-
+            <a
+              *ngIf="movie.trailer_url"
+              [href]="movie.trailer_url"
+              target="_blank"
+              class="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white px-3 py-2 rounded text-xs md:text-sm font-medium transition"
+            >
+              <i class="pi pi-play"></i> Trailer
+            </a>
 
             <!-- More Info -->
             <a
