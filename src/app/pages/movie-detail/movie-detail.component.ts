@@ -55,9 +55,16 @@ loadMovieData(slug: string) {
     }
   });
 
-  this.movieService.getMovieCast(slug).subscribe(res => {
-    this.castList = res.data.peoples || [];
-  });
+this.movieService.getMovieCast(slug).subscribe({
+  next: (res) => {
+    this.castList = res.data?.peoples || [];
+  },
+  error: (err) => {
+    console.warn('Không lấy được castList, bỏ qua', err);
+    this.castList = [];  // gán rỗng để giao diện không lỗi
+  }
+});
+
 }
 
 

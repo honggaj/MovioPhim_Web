@@ -10,6 +10,8 @@ import { MovieService } from '../../services/movie.service';
 })
 export class MovieBannerComponent {
   banners: any[] = [];
+  isLoading = true;
+
   responsiveOptions = [
     { breakpoint: '1024px', numVisible: 1, numScroll: 1 },
     { breakpoint: '768px', numVisible: 1, numScroll: 1 },
@@ -21,16 +23,19 @@ export class MovieBannerComponent {
     private movieService: MovieService
   ) {}
 
-  ngOnInit(): void {
-    this.movieService.getHomeWithPoster().subscribe({
-      next: (movies: any[]) => {
-        this.banners = movies;
-      },
-      error: (err) => {
-        console.error('Lỗi khi load banners:', err);
-      }
-    });
-  }
+ ngOnInit(): void {
+  this.isLoading = true;
+  this.movieService.getHomeWithPoster().subscribe({
+    next: (movies: any[]) => {
+      this.banners = movies;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Lỗi khi load banners:', err);
+      this.isLoading = false;
+    }
+  });
+}
 
   goToDetail(slug: string): void {
     this.router.navigate(['/phim', slug]);

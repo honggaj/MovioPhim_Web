@@ -11,15 +11,19 @@ import { Router } from '@angular/router';
 export class LatestMovieListComponent implements OnInit {
 
    movies: any[] = [];
+   isLoading: boolean = true;
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
 
   constructor(private movieService: MovieService, private router: Router) {}
 
-  ngOnInit() {
-    this.movieService.getMoviesBySlug('phim-moi').subscribe((res) => {
-      this.movies = res.data.items;
-    });
-  }
+ngOnInit() {
+  this.isLoading = true;
+  this.movieService.getMoviesBySlug('phim-moi').subscribe((res) => {
+    this.movies = res.data.items;
+    this.isLoading = false;
+  });
+}
+
 
   scrollLeft() {
     this.carousel.nativeElement.scrollBy({ left: -300, behavior: 'smooth' });

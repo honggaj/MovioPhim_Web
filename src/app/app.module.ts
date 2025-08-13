@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './shared/footer/footer.component';
-import { MovieCardComponent } from './shared/movie-card/movie-card.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MovieDetailComponent } from './pages/movie-detail/movie-detail.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,7 +29,6 @@ import { MovieTvShowsPageComponent } from './pages/movie-tv-shows-page/movie-tv-
   declarations: [
     AppComponent,
     FooterComponent,
-    MovieCardComponent,
     HomeComponent,
     MovieDetailComponent,
     MovieBannerComponent,

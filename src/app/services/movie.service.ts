@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+
+interface CacheEntry {
+  timestamp: number;
+  data: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -8,56 +13,83 @@ import { forkJoin, map, Observable, switchMap } from 'rxjs';
 export class MovieService {
   private baseUrl = 'https://ophim1.com/v1/api';
 
-  constructor(private http: HttpClient) { }
+  private cacheDuration = 5 * 60 * 1000; // 5 phút = 300000 ms
 
-  // Trang chủ
-  getHome(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/home`);
+  private homeCache: CacheEntry | null = null;
+  private moviesBySlugCache: { [slug: string]: CacheEntry } = {};
+  private movieDetailCache: { [slug: string]: CacheEntry } = {};
+
+  constructor(private http: HttpClient) {}
+
+  private isCacheValid(cacheEntry: CacheEntry | null): boolean {
+    if (!cacheEntry) return false;
+    return (Date.now() - cacheEntry.timestamp) < this.cacheDuration;
   }
-getHomeWithPoster(): Observable<any> {
-  return this.getHome().pipe(
-    switchMap((res: any) => {
-      const items = res.data.items;
 
-      // Gọi song song API detail để lấy poster_url + trailer_url
-      const detailRequests = items.map((movie: any) =>
-        this.getMovieDetail(movie.slug).pipe(
-          map((detail: any) => ({
-            ...movie,
-            poster_url: detail.data.item.poster_url,
-            trailer_url: detail.data.item.trailer_url, // 👈 lấy thêm trailer
-            quality: detail.data.item.quality,
-            lang: detail.data.item.lang,
-            type: detail.data.item.type,
-            year: detail.data.item.year,
-            view: detail.data.item.view,
-            episode_current: detail.data.item.episode_current
-          }))
-        )
+  getMovieHome(): Observable<any> {
+    if (this.isCacheValid(this.homeCache)) {
+      return of(this.homeCache!.data);
+    } else {
+      return this.http.get(`${this.baseUrl}/home`).pipe(
+        tap(data => {
+          this.homeCache = { timestamp: Date.now(), data };
+        })
       );
-
-      return forkJoin(detailRequests);
-    })
-  );
-}
-getTopViewedMovies(slug = 'phim-le'): Observable<any[]> {
-  return this.getMoviesBySlug(slug).pipe(
-    map((res: any) => {
-      const movies = res.data.items;
-      // sort giảm dần theo view
-      return movies.sort((a: any, b: any) => (b.view || 0) - (a.view || 0));
-    })
-  );
-}
-
-  // Danh sách phim theo slug (vd: phim-moi, phim-le, phim-bo, hoat-hinh,...)
-  getMoviesBySlug(slug: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/danh-sach/${slug}`);
+    }
   }
+
+  getHomeWithPoster(): Observable<any> {
+    return this.getMovieHome().pipe(
+      switchMap((res: any) => {
+        const items = res.data.items;
+
+        const detailRequests = items.map((movie: any) =>
+          this.getMovieDetail(movie.slug).pipe(
+            map((detail: any) => ({
+              ...movie,
+              poster_url: detail.data.item.poster_url,
+              trailer_url: detail.data.item.trailer_url,
+              quality: detail.data.item.quality,
+              lang: detail.data.item.lang,
+              type: detail.data.item.type,
+              year: detail.data.item.year,
+              view: detail.data.item.view,
+              episode_current: detail.data.item.episode_current,
+            }))
+          )
+        );
+
+        return forkJoin(detailRequests);
+      })
+    );
+  }
+
+  getTopViewedMovies(slug = 'phim-le'): Observable<any[]> {
+    return this.getMoviesBySlug(slug).pipe(
+      map((res: any) => {
+        const movies = res.data.items;
+        return movies.sort((a: any, b: any) => (b.view || 0) - (a.view || 0));
+      })
+    );
+  }
+
+  getMoviesBySlug(slug: string): Observable<any> {
+    const cacheEntry = this.moviesBySlugCache[slug];
+    if (this.isCacheValid(cacheEntry)) {
+      return of(cacheEntry!.data);
+    } else {
+      return this.http.get(`${this.baseUrl}/danh-sach/${slug}`).pipe(
+        tap(data => {
+          this.moviesBySlugCache[slug] = { timestamp: Date.now(), data };
+        })
+      );
+    }
+  }
+
   getTvShow(): Observable<any> {
     return this.getMoviesBySlug('tv-shows');
   }
-  // Shortcut cho từng loại
+
   getPhimMoi(): Observable<any> {
     return this.getMoviesBySlug('phim-moi');
   }
@@ -70,54 +102,53 @@ getTopViewedMovies(slug = 'phim-le'): Observable<any[]> {
     return this.getMoviesBySlug('phim-bo');
   }
 
-
   getHoatHinh(): Observable<any> {
     return this.getMoviesBySlug('hoat-hinh');
   }
-  // Tìm kiếm phim theo từ khoá
+
   searchMovies(keyword: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/tim-kiem`, {
       params: { keyword },
     });
   }
 
-  // Danh sách thể loại
   getGenres(): Observable<any> {
     return this.http.get(`${this.baseUrl}/the-loai`);
   }
 
-  // Danh sách phim theo thể loại
   getMoviesByGenre(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/the-loai/${slug}`);
   }
 
-  // Danh sách quốc gia
   getCountries(): Observable<any> {
     return this.http.get(`${this.baseUrl}/quoc-gia`);
   }
 
-  // Danh sách phim theo quốc gia
   getMoviesByCountry(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/quoc-gia/${slug}`);
   }
 
-
-  // Lấy thông tin phim
   getMovieDetail(slug: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/phim/${slug}`);
+    const cacheEntry = this.movieDetailCache[slug];
+    if (this.isCacheValid(cacheEntry)) {
+      return of(cacheEntry!.data);
+    } else {
+      return this.http.get(`${this.baseUrl}/phim/${slug}`).pipe(
+        tap(data => {
+          this.movieDetailCache[slug] = { timestamp: Date.now(), data };
+        })
+      );
+    }
   }
 
-  // Hình ảnh phim
   getMovieImages(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/phim/${slug}/images`);
   }
 
-  // Diễn viên phim
   getMovieCast(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/phim/${slug}/peoples`);
   }
 
-  // Từ khóa liên quan
   getMovieKeywords(slug: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/phim/${slug}/keywords`);
   }

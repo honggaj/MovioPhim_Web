@@ -32,8 +32,7 @@ export class MovieSeriesComponent {
     this.router.navigate(['/phim', slug]);
   }
   loadMore() {
-  // ví dụ gọi thêm API hoặc tăng page...
-this.router.navigate(['/phim-bo']);
+    this.router.navigate(['/phim-bo']);
 
-}
+  }
 }
