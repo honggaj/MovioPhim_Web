@@ -5,7 +5,7 @@
            text-transparent bg-clip-text cursor-pointer
            font-extrabold text-xl drop-shadow-md">Phim đánh giá cao</h2>
 
-  <div *ngIf="isLoading" class="text-center">Loading...</div>
+  <div *ngIf="isLoading" class="text-center">Đang tải danh sách..</div>
 
   <div *ngIf="!isLoading" class="flex flex-col gap-4">
     <div *ngFor="let movie of movies | slice:0:20" class="flex items-center gap-4 bg-zinc-900 rounded shadow p-2 hover:bg-zinc-800 transition cursor-pointer">
