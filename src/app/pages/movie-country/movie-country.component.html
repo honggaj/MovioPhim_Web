@@ -29,38 +29,42 @@
   <ng-template #movieList>
     <div *ngFor="let movie of paginatedMovies"
       class="relative text-white bg-zinc-900 shadow rounded overflow-hidden">
-      <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
-        <!-- Badge chung -->
-        <div class="absolute top-0 left-1 z-10">
-          <span
-            class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white text-[10px] px-2 py-1 rounded shadow">
-            {{ movie.quality }} + {{ movie.lang }}
-          </span>
-        </div>
+     <a [routerLink]="['/phim', movie.slug]" class="block cursor-pointer">
 
-        <div class="overflow-hidden relative">
-          <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
-            class="w-full h-40 object-cover rounded-t transform transition duration-300 hover:scale-105" />
+                        <div class="absolute top-0 left-1 z-10">
+                            <span
+                                class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white text-[10px] px-2 py-1 rounded shadow">
+                                {{ movie.quality }} + {{ movie.lang }}
+                            </span>
+                        </div>
 
-          <div *ngIf="movie.episode_current" class="absolute bottom-1 right-1 z-10">
-            <span
-              class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600
+                        <div class="overflow-hidden relative">
+                            <img [src]="'https://img.ophim.live/uploads/movies/' + movie.thumb_url" [alt]="movie.name"
+                                class="w-full h-40 object-cover rounded-t transform transition duration-300 hover:scale-105" />
+
+                            <div *ngIf="movie.episode_current" class="absolute bottom-1 right-1 z-10">
+                                <span class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600
  text-white text-[10px] px-2 py-1 rounded shadow">
-              {{ movie.episode_current }}
-            </span>
-          </div>
-        </div>
+                                    {{ movie.episode_current }}
+                                </span>
+                            </div>
+                        </div>
 
-        <!-- Category + Year -->
-        <div class="flex justify-center space-x-2 items-center p-2">
-          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
-            {{ movie.category[0]?.name }}
-          </span>
-          <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
-            {{ movie.year }}
-          </span>
-        </div>
-      </a>
+
+                        <div class="p-2">
+                            <h3 class="text-sm font-semibold truncate">{{ movie.name }}</h3>
+                            <p class="text-xs text-gray-400 truncate">{{ movie.origin_name }}</p>
+                        </div>
+
+                        <div class="flex justify-center space-x-2 items-center p-2">
+                            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+                                {{ movie.category[0]?.name }}
+                            </span>
+                            <span class="inline-block bg-gray-300 text-gray-600 text-[10px] px-2 py-1 rounded">
+                                {{ movie.year }}
+                            </span>
+                        </div>
+                    </a>
     </div>
   </ng-template>
 
