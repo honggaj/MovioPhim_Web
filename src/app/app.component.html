@@ -32,86 +32,87 @@
       </h1>
 
       <!-- Main Nav -->
-      <nav class="flex flex-col space-y-6 text-[#b3b3b3]">
-        
-        <!-- Home -->
-        <a [routerLink]="'/trang-chu'" (click)="setActive('/trang-chu')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/trang-chu',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/trang-chu'
-          }">
-          <i class="fa-solid fa-house text-lg w-5"></i>
-          <span class="hidden md:inline">Home</span>
-        </a>
+<nav class="flex flex-col space-y-6 text-[#b3b3b3]">
 
-        <!-- Phim lẻ -->
-        <a [routerLink]="'/phim-le'" (click)="setActive('/phim-le')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/phim-le',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/phim-le'
-          }">
-          <i class="fa-solid fa-clapperboard text-lg w-5"></i>
-          <span class="hidden md:inline">Phim lẻ</span>
-        </a>
+  <!-- Home -->
+  <a [routerLink]="'/trang-chu'" (click)="setActive('/trang-chu')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/trang-chu',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/trang-chu'
+     }">
+    <i class="fa-solid fa-house text-lg w-5"></i>
+    <span>Home</span>
+  </a>
 
-        <!-- Phim bộ -->
-        <a [routerLink]="'/phim-bo'" (click)="setActive('/phim-bo')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/phim-bo',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/phim-bo'
-          }">
-          <i class="fa-solid fa-film text-lg w-5"></i>
-          <span class="hidden md:inline">Phim bộ</span>
-        </a>
+  <!-- Phim lẻ -->
+  <a [routerLink]="'/phim-le'" (click)="setActive('/phim-le')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/phim-le',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/phim-le'
+     }">
+    <i class="fa-solid fa-clapperboard text-lg w-5"></i>
+    <span>Phim lẻ</span>
+  </a>
 
-        <!-- Anime -->
-        <a href="/anime" (click)="setActive('/animation')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === 'animation',
-            'text-[#b3b3b3] hover:text-white': activeLink !== 'animation'
-          }">
-          <i class="fa-solid fa-dragon text-lg w-5"></i>
-          <span class="hidden md:inline">Anime</span>
-        </a>
+  <!-- Phim bộ -->
+  <a [routerLink]="'/phim-bo'" (click)="setActive('/phim-bo')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/phim-bo',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/phim-bo'
+     }">
+    <i class="fa-solid fa-film text-lg w-5"></i>
+    <span>Phim bộ</span>
+  </a>
 
-        <!-- TV Show -->
-        <a [routerLink]="'/tv-shows'" (click)="setActive('/tv-shows')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/tv-shows',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/tv-shows'
-          }">
-          <i class="fa-solid fa-tv text-lg w-5"></i>
-          <span class="hidden md:inline">TV Show</span>
-        </a>
+  <!-- Anime -->
+  <a href="/anime" (click)="setActive('/animation')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === 'animation',
+       'text-[#b3b3b3] hover:text-white': activeLink !== 'animation'
+     }">
+    <i class="fa-solid fa-dragon text-lg w-5"></i>
+    <span>Anime</span>
+  </a>
 
-        <!-- Thể loại -->
-        <a [routerLink]="'/the-loai'" (click)="setActive('/the-loai')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/the-loai',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/the-loai'
-          }">
-          <i class="fa-solid fa-layer-group text-lg w-5"></i>
-          <span class="hidden md:inline">Thể loại</span>
-        </a>
+  <!-- TV Show -->
+  <a [routerLink]="'/tv-shows'" (click)="setActive('/tv-shows')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/tv-shows',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/tv-shows'
+     }">
+    <i class="fa-solid fa-tv text-lg w-5"></i>
+    <span>TV Show</span>
+  </a>
 
-        <!-- Country -->
-        <a [routerLink]="'/quoc-gia'" (click)="setActive('/quoc-gia')"
-          class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
-          [ngClass]="{
-            'text-[#E50914] bg-[#2e2e2e]': activeLink === '/quoc-gia',
-            'text-[#b3b3b3] hover:text-white': activeLink !== '/quoc-gia'
-          }">
-          <i class="fa-solid fa-earth-asia text-lg w-5"></i>
-          <span class="hidden md:inline">Country</span>
-        </a>
+  <!-- Thể loại -->
+  <a [routerLink]="'/the-loai'" (click)="setActive('/the-loai')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/the-loai',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/the-loai'
+     }">
+    <i class="fa-solid fa-layer-group text-lg w-5"></i>
+    <span>Thể loại</span>
+  </a>
 
-      </nav>
+  <!-- Country -->
+  <a [routerLink]="'/quoc-gia'" (click)="setActive('/quoc-gia')"
+     class="flex items-center space-x-3 px-2 py-2 rounded-md transition-all duration-300"
+     [ngClass]="{
+       'text-[#E50914] bg-[#2e2e2e]': activeLink === '/quoc-gia',
+       'text-[#b3b3b3] hover:text-white': activeLink !== '/quoc-gia'
+     }">
+    <i class="fa-solid fa-earth-asia text-lg w-5"></i>
+    <span>Country</span>
+  </a>
+
+</nav>
+
     </div>
   </aside>
 

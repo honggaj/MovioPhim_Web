@@ -34,7 +34,11 @@
 
       <!-- Info -->
       <div class="space-y-3">
-        <h1 class="text-4xl font-extrabold tracking-wide">{{ movie?.item?.name }}</h1>
+<h1 class="text-4xl font-extrabold tracking-wide
+           text-transparent bg-clip-text
+           bg-gradient-to-r from-red-600 to-orange-400">
+  {{ movie?.item?.name }}
+</h1>
 
         <p class="text-gray-600 dark:text-gray-400 text-sm">
           {{ movie?.item?.origin_name }} • {{ movie?.item?.year }} • {{ movie?.item?.time }}
@@ -59,23 +63,14 @@
       </div>
       <!-- 🎭 Diễn viên -->
       <div>
-     
-      <p-carousel
-  *ngIf="castList && castList.length > 0"
-  [value]="castList"
-  [numVisible]="10"
-  [numScroll]="8"
-  [circular]="true"
-  [autoplayInterval]="3000"
-  [responsiveOptions]="responsiveOptions"
-  [showIndicators]="false"
-  [showNavigators]="true"
-  styleClass="custom-carousel"
->
+
+        <p-carousel *ngIf="castList && castList.length > 0" [value]="castList" [numVisible]="10" [numScroll]="8"
+          [circular]="true" [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions" [showIndicators]="false"
+          [showNavigators]="true" styleClass="custom-carousel">
           [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions" [showIndicators]="false"
           [showNavigators]="true" styleClass="custom-carousel">
           <ng-template pTemplate="item" let-actor>
-               <h2 class="text-2xl font-semibold mb-3">Diễn viên</h2>
+            <h2 class="text-2xl font-semibold mb-3">Diễn viên</h2>
             <div class="text-center p-2">
               <img [src]="'https://image.tmdb.org/t/p/w185' + actor.profile_path" (error)="onImgError($event)"
                 [alt]="actor.name"
@@ -132,11 +127,17 @@
 
       <!-- Related movies -->
       <div *ngIf="relatedMovies.length > 0">
-        <h2 class="mb-4 border-b-2 border-red-600 pb-2
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="mb-4 border-b-2 border-red-600 pb-2
            bg-gradient-to-r from-red-500 to-yellow-400
            transition-all duration-300 ease-in-out
            text-transparent bg-clip-text cursor-pointer
-           font-extrabold text-xl drop-shadow-md">Phim liên quan</h2>
+           font-extrabold text-xl drop-shadow-md">
+            <img src="assets/icon/tv_show.gif" alt="Anime Icon" class="inline-block w-10 h-10 mr-2" />
+            Phim bộ
+          </h2>
+<app-movie-randome></app-movie-randome>        </div>
+
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-black rounded">
           <a *ngFor="let movie of relatedMovies" [routerLink]="['/phim', movie.slug]" class="relative text-white bg-zinc-900 shadow rounded overflow-hidden block cursor-pointer
              hover:bg-zinc-800 transition duration-300">
